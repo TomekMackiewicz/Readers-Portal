@@ -1,0 +1,4 @@
+portal:
+    resource: "@PortalBundle/Controller/"
+    type:     annotation
+    prefix:   /
