@@ -74,6 +74,8 @@ class BookController extends Controller
         $ratingRepo = $this->getDoctrine()->getManager()->getRepository('PortalBundle:Rating');
         $reviewRepo = $this->getDoctrine()->getManager()->getRepository('PortalBundle:Review');
 
+        $reader = $this->getUser();
+
         $avgRating = $ratingRepo->getAvgRating($book->getId());
         $ratingCount = $ratingRepo->getRatingCount($book->getId()); 
         $bookReviews = $reviewRepo->getBookReviews($book->getId());
@@ -84,12 +86,13 @@ class BookController extends Controller
         {
             $review = new Review();
             $review->setContents($reviewForm["contents"]->getData());
-            //$rating->setReader(1);
+            $review->setReader($reader);
             $review->setPublishDate(new \DateTime());            
             $review->setBook($book);
             $em = $this->getDoctrine()->getManager();
             $em->persist($review);
             $em->flush($review);
+            return $this->redirect($request->getUri());
         }
 
         $ratingForm = $this->createForm('PortalBundle\Form\RatingType');
@@ -98,11 +101,12 @@ class BookController extends Controller
         {
             $rating = new Rating();
             $rating->setRate($ratingForm["rate"]->getData());
-            //$rating->setReader(1);
+            $rating->setReader($reader);
             $rating->setBook($book);
             $em = $this->getDoctrine()->getManager();
             $em->persist($rating);
             $em->flush($rating);
+            return $this->redirect($request->getUri());
         }
 
         return $this->render('book/show.html.twig', array(

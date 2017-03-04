@@ -16,6 +16,12 @@ $( document ).ready(function() {
 		theme: 'fontawesome-stars-o',
 		initialRating: avgRate
 	});
+
+	$('#rating_show').barrating({
+		theme: 'fontawesome-stars-o',
+		initialRating: avgRate,
+		readonly: true
+	});
 	
 });
 
