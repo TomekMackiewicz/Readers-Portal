@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Review</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ review.id }}</td>
+            </tr>
+            <tr>
+                <th>Contents</th>
+                <td>{{ review.contents }}</td>
+            </tr>
+            <tr>
+                <th>Publishdate</th>
+                <td>{% if review.publishDate %}{{ review.publishDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('review_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('review_edit', { 'id': review.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

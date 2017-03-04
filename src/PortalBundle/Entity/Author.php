@@ -4,12 +4,16 @@ namespace PortalBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * Author
  *
  * @ORM\Table(name="authors")
  * @ORM\Entity(repositoryClass="PortalBundle\Repository\AuthorRepository")
+ * @Vich\Uploadable
  */
 class Author
 {
@@ -45,6 +49,11 @@ class Author
      * @ORM\Column(name="image", type="string", length=255, nullable=true)
      */
     private $image;
+
+    /**
+     * @var string
+     */
+    private $imageFile;
 
     // -----------------------------------------
     //
@@ -156,5 +165,104 @@ class Author
     public function getImage()
     {
         return $this->image;
+    }
+
+    /**
+     * Add books
+     *
+     * @param \PortalBundle\Entity\Book $books
+     * @return Author
+     */
+    public function addBook(\PortalBundle\Entity\Book $books)
+    {
+        $this->books[] = $books;
+
+        return $this;
+    }
+
+    /**
+     * Remove books
+     *
+     * @param \PortalBundle\Entity\Book $books
+     */
+    public function removeBook(\PortalBundle\Entity\Book $books)
+    {
+        $this->books->removeElement($books);
+    }
+
+    /**
+     * Get books
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBooks()
+    {
+        return $this->books;
+    }
+
+    /**
+     * Add quotes
+     *
+     * @param \PortalBundle\Entity\Quote $quotes
+     * @return Author
+     */
+    public function addQuote(\PortalBundle\Entity\Quote $quotes)
+    {
+        $this->quotes[] = $quotes;
+
+        return $this;
+    }
+
+    /**
+     * Remove quotes
+     *
+     * @param \PortalBundle\Entity\Quote $quotes
+     */
+    public function removeQuote(\PortalBundle\Entity\Quote $quotes)
+    {
+        $this->quotes->removeElement($quotes);
+    }
+
+    /**
+     * Get quotes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getQuotes()
+    {
+        return $this->quotes;
+    }
+
+    /**
+     * Add readers
+     *
+     * @param \PortalBundle\Entity\Reader $readers
+     * @return Author
+     */
+    public function addReader(\PortalBundle\Entity\Reader $readers)
+    {
+        $this->readers[] = $readers;
+
+        return $this;
+    }
+
+    /**
+     * Remove readers
+     *
+     * @param \PortalBundle\Entity\Reader $readers
+     */
+    public function removeReader(\PortalBundle\Entity\Reader $readers)
+    {
+        $this->readers->removeElement($readers);
+    }
+
+    /**
+     * Get readers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReaders()
+    {
+        return $this->readers;
     }
 }

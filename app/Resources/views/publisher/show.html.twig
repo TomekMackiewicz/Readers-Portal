@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Publisher</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ publisher.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ publisher.name }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('publisher_index') }}" class="btn btn-default">Back to the list</a>
+
+    <a href="{{ path('publisher_edit', { 'id': publisher.id }) }}" class="btn btn-default">Edit</a>
+
+    {{ form_start(delete_form) }}
+        <input type="submit" value="Delete" class="btn btn-default">
+    {{ form_end(delete_form) }}
+
+{% endblock %}

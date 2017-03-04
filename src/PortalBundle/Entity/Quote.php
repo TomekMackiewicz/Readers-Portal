@@ -78,4 +78,27 @@ class Quote
     {
         return $this->contents;
     }
+
+    /**
+     * Set author
+     *
+     * @param \PortalBundle\Entity\Author $author
+     * @return Quote
+     */
+    public function setAuthor(\PortalBundle\Entity\Author $author = null)
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * Get author
+     *
+     * @return \PortalBundle\Entity\Author 
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
 }

@@ -2,18 +2,23 @@
 
 namespace PortalBundle\Entity;
 
+use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * Reader
  *
  * @ORM\Table(name="readers")
  * @ORM\Entity(repositoryClass="PortalBundle\Repository\ReaderRepository")
+ * @Vich\Uploadable
  * @UniqueEntity("nick")
  */
-class Reader
+class Reader extends BaseUser
 {
     /**
      * @var int
@@ -22,7 +27,7 @@ class Reader
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -44,6 +49,11 @@ class Reader
      * @ORM\Column(name="image", type="string", length=255, nullable=true)
      */
     private $image;
+
+    /**
+     * @var string
+     */
+    private $imageFile;
 
     // -----------------------------------------
     //
@@ -74,6 +84,7 @@ class Reader
     private $ratings;
     
     public function __construct() {
+        parent::__construct();
         $this->books = new ArrayCollection();
         $this->authors = new ArrayCollection();
         $this->reviews = new ArrayCollection();
@@ -163,5 +174,137 @@ class Reader
     public function getImage()
     {
         return $this->image;
+    }
+
+    /**
+     * Add books
+     *
+     * @param \PortalBundle\Entity\Book $books
+     * @return Reader
+     */
+    public function addBook(\PortalBundle\Entity\Book $books)
+    {
+        $this->books[] = $books;
+
+        return $this;
+    }
+
+    /**
+     * Remove books
+     *
+     * @param \PortalBundle\Entity\Book $books
+     */
+    public function removeBook(\PortalBundle\Entity\Book $books)
+    {
+        $this->books->removeElement($books);
+    }
+
+    /**
+     * Get books
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBooks()
+    {
+        return $this->books;
+    }
+
+    /**
+     * Add authors
+     *
+     * @param \PortalBundle\Entity\Author $authors
+     * @return Reader
+     */
+    public function addAuthor(\PortalBundle\Entity\Author $authors)
+    {
+        $this->authors[] = $authors;
+
+        return $this;
+    }
+
+    /**
+     * Remove authors
+     *
+     * @param \PortalBundle\Entity\Author $authors
+     */
+    public function removeAuthor(\PortalBundle\Entity\Author $authors)
+    {
+        $this->authors->removeElement($authors);
+    }
+
+    /**
+     * Get authors
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAuthors()
+    {
+        return $this->authors;
+    }
+
+    /**
+     * Add reviews
+     *
+     * @param \PortalBundle\Entity\Review $reviews
+     * @return Reader
+     */
+    public function addReview(\PortalBundle\Entity\Review $reviews)
+    {
+        $this->reviews[] = $reviews;
+
+        return $this;
+    }
+
+    /**
+     * Remove reviews
+     *
+     * @param \PortalBundle\Entity\Review $reviews
+     */
+    public function removeReview(\PortalBundle\Entity\Review $reviews)
+    {
+        $this->reviews->removeElement($reviews);
+    }
+
+    /**
+     * Get reviews
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReviews()
+    {
+        return $this->reviews;
+    }
+
+    /**
+     * Add ratings
+     *
+     * @param \PortalBundle\Entity\Rating $ratings
+     * @return Reader
+     */
+    public function addRating(\PortalBundle\Entity\Rating $ratings)
+    {
+        $this->ratings[] = $ratings;
+
+        return $this;
+    }
+
+    /**
+     * Remove ratings
+     *
+     * @param \PortalBundle\Entity\Rating $ratings
+     */
+    public function removeRating(\PortalBundle\Entity\Rating $ratings)
+    {
+        $this->ratings->removeElement($ratings);
+    }
+
+    /**
+     * Get ratings
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRatings()
+    {
+        return $this->ratings;
     }
 }

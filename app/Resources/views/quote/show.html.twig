@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Quote</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ quote.id }}</td>
+            </tr>
+            <tr>
+                <th>Contents</th>
+                <td>{{ quote.contents }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('quote_index') }}" class="btn btn-default">Back to the list</a>
+
+    <a href="{{ path('quote_edit', { 'id': quote.id }) }}" class="btn btn-default">Edit</a>
+
+    {{ form_start(delete_form) }}
+        <input type="submit" value="Delete" class="btn btn-danger">
+    {{ form_end(delete_form) }}
+
+{% endblock %}

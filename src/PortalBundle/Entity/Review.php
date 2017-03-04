@@ -118,4 +118,50 @@ class Review
     {
         return $this->publishDate;
     }
+
+    /**
+     * Set reader
+     *
+     * @param \PortalBundle\Entity\Reader $reader
+     * @return Review
+     */
+    public function setReader(\PortalBundle\Entity\Reader $reader = null)
+    {
+        $this->reader = $reader;
+
+        return $this;
+    }
+
+    /**
+     * Get reader
+     *
+     * @return \PortalBundle\Entity\Reader 
+     */
+    public function getReader()
+    {
+        return $this->reader;
+    }
+
+    /**
+     * Set book
+     *
+     * @param \PortalBundle\Entity\Book $book
+     * @return Review
+     */
+    public function setBook(\PortalBundle\Entity\Book $book = null)
+    {
+        $this->book = $book;
+
+        return $this;
+    }
+
+    /**
+     * Get book
+     *
+     * @return \PortalBundle\Entity\Book 
+     */
+    public function getBook()
+    {
+        return $this->book;
+    }
 }

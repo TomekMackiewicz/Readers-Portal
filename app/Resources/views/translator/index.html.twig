@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Translators list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for translator in translators %}
+            <tr>
+                <td><a href="{{ path('translator_show', { 'id': translator.id }) }}">{{ translator.id }}</a></td>
+                <td>{{ translator.name }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('translator_show', { 'id': translator.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('translator_edit', { 'id': translator.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('translator_new') }}">Create a new translator</a>
+        </li>
+    </ul>
+{% endblock %}

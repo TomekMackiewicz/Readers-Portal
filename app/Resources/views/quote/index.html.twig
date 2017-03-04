@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Quotes list</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Contents</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for quote in quotes %}
+            <tr>
+                <td><a href="{{ path('quote_show', { 'id': quote.id }) }}">{{ quote.id }}</a></td>
+                <td>{{ quote.contents }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('quote_show', { 'id': quote.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('quote_edit', { 'id': quote.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('quote_new') }}" class="btn btn-default">Create a new quote</a>
+
+{% endblock %}

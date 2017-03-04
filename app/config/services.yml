@@ -7,3 +7,16 @@ services:
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+
+    authentication.handler.login_success_handler:
+        class:  PortalBundle\Security\LoginSuccessHandler
+        arguments:  ['@router', '@security.authorization_checker']
+
+    app.form.registration:
+        class: PortalBundle\Form\RegistrationType
+        tags:
+            - { name: form.type, alias: app_user_registration }
+    app.form.profile:
+        class: PortalBundle\Form\ReaderType
+        tags:
+            - { name: form.type, alias: app_user_profile }

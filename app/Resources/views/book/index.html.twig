@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Books list</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Cover</th>
+                <th>Publish Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for book in books %}
+            <tr>
+                <td><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.id }}</a></td>
+                <td>{{ book.title }}</td>
+                <td>{{ book.description }}</td>
+                <td><img src="{{ vich_uploader_asset(book, 'coverImage') | imagine_filter('thumb') }}" alt="{{ book.title }}" /></td>
+                <td>{% if book.publishDate %}{{ book.publishDate|date('Y-m-d') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('book_show', { 'id': book.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('book_edit', { 'id': book.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('book_new') }}" class="btn btn-default">Create a new book</a>
+
+{% endblock %}

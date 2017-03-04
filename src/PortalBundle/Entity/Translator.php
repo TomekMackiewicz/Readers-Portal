@@ -4,6 +4,7 @@ namespace PortalBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
@@ -83,5 +84,38 @@ class Translator
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Add books
+     *
+     * @param \PortalBundle\Entity\Book $books
+     * @return Translator
+     */
+    public function addBook(\PortalBundle\Entity\Book $books)
+    {
+        $this->books[] = $books;
+
+        return $this;
+    }
+
+    /**
+     * Remove books
+     *
+     * @param \PortalBundle\Entity\Book $books
+     */
+    public function removeBook(\PortalBundle\Entity\Book $books)
+    {
+        $this->books->removeElement($books);
+    }
+
+    /**
+     * Get books
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBooks()
+    {
+        return $this->books;
     }
 }

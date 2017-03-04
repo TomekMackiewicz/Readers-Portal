@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="pull-left">
+        <img src="{{ vich_uploader_asset(book, 'coverImage') | imagine_filter('thumb') }}" alt="{{ book.title }}" class="img-thumbnail" />
+    </div>    
+
+    <h2>{{ book.title }}</h2>
+    <h3><a href="{{ path('author_show', { 'id': book.author.id }) }}">{{ book.author.name }}</a></h3>
+    {% if book.publishDate %}<p>Publish Date: {{ book.publishDate|date('Y-m-d') }}</p>{% endif %}
+    {% if book.translator %}<p>Translator: {{ book.translator.name }}</p>{% endif %}    
+    {% if book.publisher %}<p>Publisher: {{ book.publisher.name }}</p>{% endif %}
+    <p>{{ book.description }}</p>
+
+    {{ form_start(rating_form, {
+        'action': path('book_show', { 'id': book.id }), 
+        'method': 'POST',
+        'attr': {
+            'id': 'ratingForm',
+            'class': 'form-inline'
+            }
+    }) }}
+        {{ form_row(rating_form.rate) }}
+        <input type="submit" value="Rate" class="btn btn-default btn-xs"> 
+    {{ form_end(rating_form) }}
+
+    <p>
+        <span id="avgRate">{{ avgRating|round(2) }}</span>
+         ({{ratingCount}} votes)
+     </p>
+
+    <div class="clearfix"></div>
+
+    <hr>
+    <a href="{{ path('book_index') }}" class="btn btn-default pull-left">Back to the list</a>
+
+    <a href="{{ path('book_edit', { 'id': book.id }) }}" class="btn btn-default pull-left">Edit</a>
+
+    {{ form_start(delete_form) }}
+        <input type="submit" value="Delete" class="btn btn-danger pull-left">
+    {{ form_end(delete_form) }}
+    
+    <div class="clearfix"></div>
+    <hr>
+    <h3>Reviews:</h3>
+    {{ form_start(review_form, {
+        'action': path('book_show', { 'id': book.id }), 
+        'method': 'POST'
+        }) 
+    }}
+        {{ form_widget(review_form) }}
+        <input type="submit" value="Add review" class="btn btn-default"> 
+    {{ form_end(review_form) }}
+    <hr>
+    <div class="panel panel-default">
+        {% for review in bookReviews %}
+            <div class="panel-heading">[User]: {{review.publishDate|date('Y-m-d')}} [Logged user rating]</div>        
+            <div class="panel-body">{{review.contents}}</div>   
+        {% endfor %}
+    </div>
+
+{% endblock %}
