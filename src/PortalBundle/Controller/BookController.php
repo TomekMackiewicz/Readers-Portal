@@ -26,9 +26,10 @@ class BookController extends BaseController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $books = $em->getRepository('PortalBundle:Book')->findAll();
+        $books = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('PortalBundle:Book')->findAll();
 
         return $this->render('book/index.html.twig', array(
             'books' => $books,
@@ -48,9 +49,8 @@ class BookController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($book);
-            $em->flush($book);
+            $this->getDoctrine()->getManager()->persist($book);
+            $this->getDoctrine()->getManager()->flush($book);
 
             return $this->redirectToRoute('book_show', array('id' => $book->getId()));
         }
@@ -70,68 +70,27 @@ class BookController extends BaseController
     public function showAction(Request $request, Book $book)
     {
         $deleteForm = $this->createDeleteForm($book);
-
-        $ratingRepo = $this->getDoctrine()->getManager()->getRepository('PortalBundle:Rating');
-        $reviewRepo = $this->getDoctrine()->getManager()->getRepository('PortalBundle:Review');
-
         $reader = $this->getUser();
+        $reviewForm = $this->createForm('PortalBundle\Form\ReviewType')->handleRequest($request);
+        $ratingForm = $this->createForm('PortalBundle\Form\RatingType')->handleRequest($request);
 
-        $avgRating = $ratingRepo->getAvgRating($book->getId());
-        $ratingCount = $ratingRepo->getRatingCount($book->getId()); 
-        $bookReviews = $reviewRepo->getBookReviews($book->getId());
-        $checkReadersUniqueRating = $ratingRepo->checkReadersUniqueRating($reader->getId(),$book->getId());
-        $checkReadersUniqueReview = $reviewRepo->checkReadersUniqueReview($reader->getId(),$book->getId());
+        $avgRating = $this->getRatingRepo()
+            ->getAvgRating($book->getId());
 
-        $reviewForm = $this->createForm('PortalBundle\Form\ReviewType');
-        $reviewForm->handleRequest($request);
+        $ratingCount = $this->getRatingRepo()
+            ->getRatingCount($book->getId());
 
-        if ($reviewForm->isSubmitted() && $reviewForm->isValid()) 
-        {
-            if ($checkReadersUniqueReview == 0) 
-            {             
-                $review = new Review();
-                $review->setContents($reviewForm["contents"]->getData());
-                $review->setRate($reviewForm["rate"]->getData());
-                $review->setReader($reader);
-                $review->setPublishDate(new \DateTime());            
-                $review->setBook($book);
+        $checkReadersUniqueRating = $this->getRatingRepo()
+            ->checkReadersUniqueRating($reader->getId(),$book->getId());
 
-                $rating = new Rating();                
-                $rating->setRate($reviewForm["rate"]->getData());
-                $rating->setReader($reader);
-                $rating->setBook($book);
+        $bookReviews = $this->getReviewRepo()
+            ->getBookReviews($book->getId());
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($review);
-                $em->persist($rating);
-                $em->flush();
+        $checkReadersUniqueReview = $this->getReviewRepo()
+            ->checkReadersUniqueReview($reader->getId(),$book->getId());
 
-                return $this->redirect($request->getUri());
-            } else {
-                $reviewForm->addError(new FormError('You already posted a review!'));
-            }                     
-        }
-
-        $ratingForm = $this->createForm('PortalBundle\Form\RatingType');
-        $ratingForm->handleRequest($request);
-
-        if ($ratingForm->isSubmitted() && $ratingForm->isValid()) 
-        {
-            if ($checkReadersUniqueRating == 0) 
-            {            
-                $rating = new Rating();
-                $rating->setRate($ratingForm["rate"]->getData());
-                $rating->setReader($reader);
-                $rating->setBook($book);
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($rating);
-                $em->flush($rating);
-
-                return $this->redirect($request->getUri());
-            } else {
-                $ratingForm->addError(new FormError('You already voted on this book!'));
-            }                
-        }            
+        $this->getReviews($request, $reviewForm, $checkReadersUniqueReview, $book);
+        $this->getRatings($request, $ratingForm, $checkReadersUniqueRating, $book);
 
         return $this->render('book/show.html.twig', array(
             'book' => $book,
@@ -181,9 +140,8 @@ class BookController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($book);
-            $em->flush($book);
+            $this->getDoctrine()->getManager()->remove($book);
+            $this->getDoctrine()->getManager()->flush($book);
         }
 
         return $this->redirectToRoute('book_index');
