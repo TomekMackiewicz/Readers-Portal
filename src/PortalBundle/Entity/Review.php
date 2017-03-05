@@ -23,6 +23,13 @@ class Review
     private $id;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="rate", type="integer", nullable=true)
+     */
+    private $rate;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="contents", type="text")
@@ -94,6 +101,29 @@ class Review
     public function getContents()
     {
         return $this->contents;
+    }
+
+    /**
+     * Set rate
+     *
+     * @param integer $rate
+     * @return Review
+     */
+    public function setRate($rate)
+    {
+        $this->rate = $rate;
+
+        return $this;
+    }
+
+    /**
+     * Get rate
+     *
+     * @return integer 
+     */
+    public function getRate()
+    {
+        return $this->rate;
     }
 
     /**

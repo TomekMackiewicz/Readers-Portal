@@ -15,19 +15,7 @@
             {% if book.translator %}<p>Translator: {{ book.translator.name }}</p>{% endif %}    
             {% if book.publisher %}<p>Publisher: {{ book.publisher.name }}</p>{% endif %}
             <p>{{ book.description }}</p>
-
-{#             {{ form_start(rating_form, {
-                'action': path('book_show', { 'id': book.id }), 
-                'method': 'POST',
-                'attr': {
-                    'id': 'ratingForm',
-                    'class': 'form-inline'
-                    }
-            }) }}
-                {{ form_row(rating_form.rate) }}
-                <input type="submit" value="Rate" class="btn btn-default btn-xs"> 
-            {{ form_end(rating_form) }} #}
-            <select id="rating_show">
+            <select id="showRating">
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -41,7 +29,7 @@
             </select>
             <p>
                 <span id="avgRate">{{ avgRating|round(2) }}</span>
-                 ({{ratingCount}} votes)
+                 ({{ratingCount}} votes, {{ bookReviews|length }} reviews)
              </p>
 
             <div class="clearfix"></div>
@@ -52,44 +40,72 @@
                     <div class="panel-heading">
                         <strong>{{review.reader}}</strong>, 
                         {{review.publishDate|date('Y-m-d')}} 
-                        [ user rating]
+                        {% if review.rate %}
+                            <span class="hidden">{{review.rate}}</span>
+                            <select class="showReaderRating">
+                              <option value="1">1</option>
+                              <option value="2">2</option>
+                              <option value="3">3</option>
+                              <option value="4">4</option>
+                              <option value="5">5</option>
+                              <option value="6">6</option>
+                              <option value="7">7</option>
+                              <option value="8">8</option>
+                              <option value="9">9</option>
+                              <option value="10">10</option>  
+                            </select>                            
+                        {% endif %}
                     </div>        
                     <div class="panel-body">{{review.contents}}</div>   
                 {% endfor %}
             </div>
         </div>
+       
         <div class="col-md-4">
-            <h3>Admin options</h3>
-            <a href="{{ path('book_edit', { 'id': book.id }) }}" class="btn btn-default pull-left">Edit</a>
 
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete" class="btn btn-danger">
-            {{ form_end(delete_form) }}
+            {% if is_granted('ROLE_ADMIN') %}
 
-            <h3>Rate this book</h3>
-            {{ form_start(rating_form, {
-                'action': path('book_show', { 'id': book.id }), 
-                'method': 'POST',
-                'attr': {
-                    'id': 'ratingForm',
-                    'class': 'form-inline'
-                    }
-                }) 
-            }}
-            {{ form_row(rating_form.rate) }}
-                <input type="submit" value="Rate" class="btn btn-default btn-xs"> 
-            {{ form_end(rating_form) }}
+                <h3>Admin options</h3>
+                <a href="{{ path('book_edit', { 'id': book.id }) }}" class="btn btn-default pull-left">Edit</a>
 
-            <h3>Add review</h3>
-            {{ form_start(review_form, {
-                'action': path('book_show', { 'id': book.id }), 
-                'method': 'POST'
-                }) 
-            }}
-            {{ form_widget(review_form) }}
-                <input type="submit" value="Add review" class="btn btn-default"> 
-            {{ form_end(review_form) }}
+                {{ form_start(delete_form) }}
+                    <input type="submit" value="Delete" class="btn btn-danger">
+                {{ form_end(delete_form) }}
+                {% endif %}
 
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+
+                <h3>Rate this book</h3>
+                {{ form_start(rating_form, {
+                    'action': path('book_show', { 'id': book.id }), 
+                    'method': 'POST',
+                    'attr': {
+                        'id': 'ratingForm',
+                        'class': 'form-inline'
+                        }
+                    }) 
+                }}
+                {{ form_errors(rating_form) }}
+                {{ form_row(rating_form.rate) }}
+                    <input type="submit" value="Rate" class="btn btn-default btn-xs"> 
+                {{ form_end(rating_form) }}
+
+                <h3>Add review</h3>
+                {{ form_start(review_form, {
+                    'action': path('book_show', { 'id': book.id }), 
+                    'method': 'POST'
+                    }) 
+                }}
+                {{ form_errors(review_form) }}
+                {{ form_widget(review_form) }}
+                    <input type="submit" value="Add review" class="btn btn-default"> 
+                {{ form_end(review_form) }}
+
+            {% else %}
+                <p>Please, log in to rate and add reviews.</p>
+            {% endif %}    
+
+            <hr>
             <a href="{{ path('book_index') }}" class="btn btn-default">Back to the list</a>
 
         </div>

@@ -5,7 +5,7 @@ $( document ).ready(function() {
 	});
 
 	$(".btn-danger").click(function(){
-		if (!confirm("Do you really want to delete?")){
+		if (!confirm("Do you really want to delete?")) {
 			return false;
 		}
 	});
@@ -17,12 +17,24 @@ $( document ).ready(function() {
 		initialRating: avgRate
 	});
 
-	$('#rating_show').barrating({
+	$('#portalbundle_review_rate').barrating({
+		theme: 'fontawesome-stars-o',
+		initialRating: avgRate
+	});
+
+	$('#showRating').barrating({
 		theme: 'fontawesome-stars-o',
 		initialRating: avgRate,
 		readonly: true
 	});
-	
+
+	$('.showReaderRating').each(function() {
+		$(this).barrating({
+			theme: 'fontawesome-stars-o',
+			initialRating: $(this).prev().text(),
+			readonly: true
+		});
+	});
+
 });
 
-//document.getElementById('ratingForm').submit();

@@ -23,4 +23,14 @@ class ReviewRepository extends EntityRepository
 		return $bookReviews;
 	}
 
+	public function checkReadersUniqueReview($readerId,$bookId) {
+		$readersUniqueReview = $this->getEntityManager()->createQuery(
+			"SELECT COUNT(r) 
+			 FROM PortalBundle:Review r 
+			 WHERE r.reader = $readerId
+			 AND r.book = $bookId"
+		)->getSingleScalarResult();
+		return $readersUniqueReview;		
+	}
+
 }
