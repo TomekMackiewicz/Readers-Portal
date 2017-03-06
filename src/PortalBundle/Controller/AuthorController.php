@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Author controller.
@@ -30,6 +31,34 @@ class AuthorController extends Controller
         return $this->render('author/index.html.twig', array(
             'authors' => $authors,
         ));
+    }
+
+    /**
+     * @Route("/search", name="author_search")
+     * @Method("GET")
+     */
+    public function searchAction(Request $request)
+    {
+        $source = array();
+        $term = trim(strip_tags($request->get('term')));
+
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('PortalBundle:Author')->createQueryBuilder('a')
+            ->where('a.name LIKE :name')
+            ->setParameter('name', '%'.$term.'%')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+
+        foreach ($entities as $entity)
+        {
+            $source[] = ['value' => $entity->getId(), 'label' => $entity->getName()];
+        }
+
+        $response = new JsonResponse();
+        $response->setData($source);
+
+        return $response;
     }
 
     /**

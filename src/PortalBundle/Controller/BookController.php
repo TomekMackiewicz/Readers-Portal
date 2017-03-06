@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Book controller.
@@ -18,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class BookController extends BaseController
 {
+
     /**
      * Lists all book entities.
      *
@@ -34,6 +36,34 @@ class BookController extends BaseController
         return $this->render('book/index.html.twig', array(
             'books' => $books,
         ));
+    }
+
+    /**
+     * @Route("/search", name="book_search")
+     * @Method("GET")
+     */
+    public function searchAction(Request $request)
+    {
+        $source = array();
+        $term = trim(strip_tags($request->get('term')));
+
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('PortalBundle:Book')->createQueryBuilder('b')
+            ->where('b.title LIKE :title')
+            ->setParameter('title', '%'.$term.'%')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+
+        foreach ($entities as $entity)
+        {
+            $source[] = ['value' => $entity->getId(), 'label' => $entity->getTitle()];
+        }
+
+        $response = new JsonResponse();
+        $response->setData($source);
+
+        return $response;
     }
 
     /**
@@ -92,8 +122,6 @@ class BookController extends BaseController
 
         $this->setReview($request, $reviewForm, $checkReadersUniqueReview, $book);
         $this->setRating($request, $ratingForm, $checkReadersUniqueRating, $book);
-        //$this->setReaderBooks($book, $reader);
-        // addBook($book);
 
         return $this->render('book/show.html.twig', array(
             'book' => $book,

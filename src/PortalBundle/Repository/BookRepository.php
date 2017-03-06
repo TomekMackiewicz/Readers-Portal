@@ -12,4 +12,27 @@ use Doctrine\ORM\EntityRepository;
  */
 class BookRepository extends EntityRepository
 {
+
+	// public function searchBook() {
+
+	//     $q = $_REQUEST["q"]; 
+
+	// 	$result = $this->getEntityManager()->createQuery(
+	// 		"SELECT b.title
+	// 		 FROM PortalBundle:Book b 
+	// 		 WHERE b.title LIKE '%$q%'" 
+	// 	)->getResult();
+
+	//     $json=array();
+
+	//     while($row = mysql_fetch_array($result)) {
+	//       array_push($json, $row['title']);
+	//     }
+
+	//     echo json_encode($json);
+
+	// }
+
+
+
 }

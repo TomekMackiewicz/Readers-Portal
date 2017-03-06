@@ -33,7 +33,7 @@ class BookType extends AbstractType
             ->add('author', EntityType::class, array(
                 'class' => 'PortalBundle:Author',
                 'choice_label' => 'name'
-            ))
+            ))          
             ->add('translator', EntityType::class, array(
                 'class' => 'PortalBundle:Translator',
                 'choice_label' => 'name'

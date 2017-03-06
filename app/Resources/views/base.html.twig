@@ -23,13 +23,25 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              {% if is_granted('ROLE_ADMIN') %}
-                  <a class="navbar-brand" href="{{path('portal_default_index')}}">Readers Portal <i class="ion-social-buffer"></i></a>
-                  {% else %}
-                  <a class="navbar-brand" href="#">Readers Portal <i class="ion-social-buffer"></i></a>                
-              {% endif %}              
+              <a class="navbar-brand" href="{{path('portal_default_index')}}">Readers Portal <i class="fa fa-book" aria-hidden="true"></i></a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="{{ path('book_index') }}">Books</a></li>
+        <li><a href="{{ path('author_index') }}">Authors</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">One more separated link</a></li>
+          </ul>
+        </li>
+      </ul>              
               <ul class="nav navbar-nav navbar-right">                
               {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}              
                 <li class="dropdown">
@@ -53,6 +65,18 @@
                 <li><a href="{{ path('fos_user_registration_register') }}">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</a></li>
               {% endif %}
               </ul>
+              <form class="navbar-form navbar-right">
+                <div class="form-group">
+                  <input type="text" class="searchBook form-control" placeholder="Search book">
+                </div>
+                {# <button type="submit" class="btn btn-default">Submit</button> #}
+              </form>
+              <form class="navbar-form navbar-right">
+                <div class="form-group">
+                  <input type="text" class="searchAuthor form-control" placeholder="Search author">
+                </div>
+                {# <button type="submit" class="btn btn-default">Submit</button> #}
+              </form>                              
             </div><!-- /.navbar-collapse -->
           </div><!-- /.container-fluid -->
         </nav>        
@@ -70,6 +94,31 @@
             <script src="{{ asset('bundles/portal/js/jquery-ui.min.js') }}"></script>
             <script src="{{ asset('bundles/portal/js/jquery.barrating.min.js') }}"></script>
             <script src="{{ asset('bundles/portal/js/scripts.js') }}"></script>
+            <script>
+
+              $(function() {
+                $( ".searchBook" ).autocomplete({
+                  source: "{{ path('book_search') }}",
+                  select: function( event, ui ) { 
+                      var url = "{{ path('book_show', {'id':"id"}) }}";
+                      url = url.replace("id", ui.item.value);
+                      window.location.href = url;
+                  }                  
+                });
+              });
+
+              $(function() {
+                $( ".searchAuthor" ).autocomplete({
+                  source: "{{ path('author_search') }}",
+                  select: function( event, ui ) { 
+                      var url = "{{ path('author_show', {'id':"id"}) }}";
+                      url = url.replace("id", ui.item.value);
+                      window.location.href = url;
+                  }                  
+                });
+              });
+
+            </script>
         {% endblock %}
     </body>
 </html>
