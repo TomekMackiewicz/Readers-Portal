@@ -13,7 +13,7 @@ class ReaderType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nick')->add('description')->add('image')->add('books')->add('authors')        ;
+        $builder->add('nick')->add('description')->add('image')->add('books')->add('authors');
     }
     
     /**

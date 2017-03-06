@@ -70,6 +70,7 @@ class BookController extends BaseController
     public function showAction(Request $request, Book $book)
     {
         $deleteForm = $this->createDeleteForm($book);
+        $readForm = $this->createReadForm($book);
         $reader = $this->getUser();
         $reviewForm = $this->createForm('PortalBundle\Form\ReviewType')->handleRequest($request);
         $ratingForm = $this->createForm('PortalBundle\Form\RatingType')->handleRequest($request);
@@ -89,8 +90,10 @@ class BookController extends BaseController
         $checkReadersUniqueReview = $this->getReviewRepo()
             ->checkReadersUniqueReview($reader->getId(),$book->getId());
 
-        $this->getReviews($request, $reviewForm, $checkReadersUniqueReview, $book);
-        $this->getRatings($request, $ratingForm, $checkReadersUniqueRating, $book);
+        $this->setReview($request, $reviewForm, $checkReadersUniqueReview, $book);
+        $this->setRating($request, $ratingForm, $checkReadersUniqueRating, $book);
+        //$this->setReaderBooks($book, $reader);
+        // addBook($book);
 
         return $this->render('book/show.html.twig', array(
             'book' => $book,
@@ -100,6 +103,7 @@ class BookController extends BaseController
             'delete_form' => $deleteForm->createView(),
             'rating_form' => $ratingForm->createView(),
             'review_form' => $reviewForm->createView(),
+            'read_form' => $readForm->createView(),
         ));
     }
 
@@ -159,7 +163,50 @@ class BookController extends BaseController
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('book_delete', array('id' => $book->getId())))
             ->setMethod('DELETE')
-            ->getForm()
-        ;
+            ->getForm();
     }
+
+    /**
+     * Marks book as read.
+     *
+     * @Route("/{id}/read", name="book_read")
+     * @Method("POST")
+     */
+    public function readAction(Request $request, Book $book)
+    {
+        $form = $this->createReadForm($book);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $reader = $this->getUser();
+            $book->addReader($reader);
+            $reader->addBook($book);
+            $this->getDoctrine()->getManager()->persist($book);
+            $this->getDoctrine()->getManager()->persist($reader);
+            $this->getDoctrine()->getManager()->flush();
+
+            $request->getSession()
+                ->getFlashBag()
+                ->add('success', 'Book marked as read!');
+
+        }
+
+        return $this->redirectToRoute('book_show', array('id' => $book->getId()));
+    }    
+
+    /**
+     * Creates a form to mark book as read.
+     *
+     * @param Book $book The book entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createReadForm(Book $book)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('book_read', array('id' => $book->getId())))
+            ->setMethod('POST')
+            ->getForm();
+    }
+
 }

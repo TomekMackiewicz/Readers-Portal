@@ -3,6 +3,7 @@
 namespace PortalBundle\Controller;
 
 use PortalBundle\Entity\Book;
+use PortalBundle\Entity\Reader;
 use PortalBundle\Entity\Rating;
 use PortalBundle\Entity\Review;
 use Symfony\Component\Form\FormError;
@@ -13,21 +14,19 @@ use Symfony\Component\HttpFoundation\Request;
 class BaseController extends Controller
 {
 
-	// public function getManager() {
-	// 	$em
-	// }
-
-	public function getRatingRepo() {
+	public function getRatingRepo() 
+	{
 		$ratingRepo = $this->getDoctrine()->getManager()->getRepository('PortalBundle:Rating');
 		return $ratingRepo;
 	}
 
-	public function getReviewRepo() {
+	public function getReviewRepo() 
+	{
 		$reviewRepo = $this->getDoctrine()->getManager()->getRepository('PortalBundle:Review');
 		return $reviewRepo;
 	}
 
-	public function getReviews(Request $request, $reviewForm, $checkReadersUniqueReview, Book $book) 
+	public function setReview(Request $request, $reviewForm, $checkReadersUniqueReview, Book $book) 
 	{
 		$reader = $this->getUser();
 
@@ -60,7 +59,7 @@ class BaseController extends Controller
 	    }
 	}
 
-	public function getRatings(Request $request, $ratingForm, $checkReadersUniqueRating, Book $book)
+	public function setRating(Request $request, $ratingForm, $checkReadersUniqueRating, Book $book)
 	{
 
 		$reader = $this->getUser();
@@ -84,5 +83,6 @@ class BaseController extends Controller
             }                
         } 		
 	}
+
 
 }
