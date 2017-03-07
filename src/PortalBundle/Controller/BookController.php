@@ -31,7 +31,7 @@ class BookController extends BaseController
         $books = $this
             ->getDoctrine()
             ->getManager()
-            ->getRepository('PortalBundle:Book')->findAll();
+            ->getRepository('PortalBundle:Book')->findBy(array(), array('publishDate' => 'DESC'));
 
         return $this->render('book/index.html.twig', array(
             'books' => $books,
@@ -105,29 +105,17 @@ class BookController extends BaseController
         $reviewForm = $this->createForm('PortalBundle\Form\ReviewType')->handleRequest($request);
         $ratingForm = $this->createForm('PortalBundle\Form\RatingType')->handleRequest($request);
 
-        $avgRating = $this->getRatingRepo()
-            ->getAvgRating($book->getId());
-
-        $ratingCount = $this->getRatingRepo()
-            ->getRatingCount($book->getId());
-
         $checkReadersUniqueRating = $this->getRatingRepo()
             ->checkReadersUniqueRating($reader->getId(),$book->getId());
-
-        $bookReviews = $this->getReviewRepo()
-            ->getBookReviews($book->getId());
 
         $checkReadersUniqueReview = $this->getReviewRepo()
             ->checkReadersUniqueReview($reader->getId(),$book->getId());
 
-        $this->setReview($request, $reviewForm, $checkReadersUniqueReview, $book);
+        $this->setReview($request, $reviewForm, $checkReadersUniqueReview, $checkReadersUniqueRating, $book);
         $this->setRating($request, $ratingForm, $checkReadersUniqueRating, $book);
 
         return $this->render('book/show.html.twig', array(
             'book' => $book,
-            'avgRating' => $avgRating,
-            'ratingCount' => $ratingCount,
-            'bookReviews' => $bookReviews,
             'delete_form' => $deleteForm->createView(),
             'rating_form' => $ratingForm->createView(),
             'review_form' => $reviewForm->createView(),

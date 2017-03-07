@@ -22,10 +22,12 @@ $( document ).ready(function() {
 		initialRating: avgRate
 	});
 
-	$('#showRating').barrating({
-		theme: 'fontawesome-stars-o',
-		initialRating: avgRate,
-		readonly: true
+	$('.showRating').each(function() {
+		$(this).barrating({
+			theme: 'fontawesome-stars-o',
+			initialRating: $(this).next().text(),
+			readonly: true
+		});
 	});
 
 	$('.showReaderRating').each(function() {

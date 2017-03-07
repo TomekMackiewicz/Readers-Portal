@@ -14,7 +14,7 @@
             {% if book.translator %}<p>Translator: {{ book.translator.name }}</p>{% endif %}    
             {% if book.publisher %}<p>Publisher: {{ book.publisher.name }}</p>{% endif %}
             <p>{{ book.description }}</p>
-            <select id="showRating">
+            <select class="showRating">
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -26,16 +26,20 @@
               <option value="9">9</option>
               <option value="10">10</option>  
             </select>
-            <p>
-                <span id="avgRate">{{ avgRating|round(2) }}</span>
-                 ({{ratingCount}} votes, {{ bookReviews|length }} reviews)
-             </p>
+
+            {% set sumratings = 0 %}
+            {% for rating in book.ratings %}
+                {% set sumratings = sumratings + rating.rate %}
+            {% endfor %}
+            
+            <span id="avgRate">{{ sumratings / book.ratings|length }}</span>
+             ({{book.ratings|length}} votes, {{ book.reviews|length }} reviews)
 
             <div class="clearfix"></div>
 
             <h3>Reviews:</h3>
             <div class="panel panel-default">
-                {% for review in bookReviews %}
+                {% for review in book.reviews %}
                     <div class="panel-heading">
                         <strong>{{review.reader}}</strong>, 
                         {{review.publishDate|date('Y-m-d')}} 
@@ -119,7 +123,6 @@
             {{ form_end(read_form) }}
 
             <a href="{{ path('book_index') }}" class="btn btn-default">Add to favourite</a>
-            <a href="{{ path('book_index') }}" class="btn btn-default">Back to the list</a>
 
         </div>
     </div>        

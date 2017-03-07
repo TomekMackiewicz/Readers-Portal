@@ -26,7 +26,7 @@ class BaseController extends Controller
 		return $reviewRepo;
 	}
 
-	public function setReview(Request $request, $reviewForm, $checkReadersUniqueReview, Book $book) 
+	public function setReview(Request $request, $reviewForm, $checkReadersUniqueReview, $checkReadersUniqueRating, Book $book) 
 	{
 		$reader = $this->getUser();
 
@@ -36,19 +36,31 @@ class BaseController extends Controller
 	        {             
 	            $review = new Review();
 	            $review->setContents($reviewForm["contents"]->getData());
-	            $review->setRate($reviewForm["rate"]->getData());
+	            if($checkReadersUniqueRating == 0) {
+	            	$review->setRate($reviewForm["rate"]->getData());
+	            } else {
+	            	$reviewForm->addError(new FormError('You already voted on this book!'));
+	            }
+	            
 	            $review->setReader($reader);
 	            $review->setPublishDate(new \DateTime());            
 	            $review->setBook($book);
 
-	            $rating = new Rating();                
-	            $rating->setRate($reviewForm["rate"]->getData());
-	            $rating->setReader($reader);
-	            $rating->setBook($book);
+	            if ($checkReadersUniqueRating == 0)
+	            {
+			            $rating = new Rating();                
+			            $rating->setRate($reviewForm["rate"]->getData());
+			            $rating->setReader($reader);
+			            $rating->setBook($book);
+	            } 
 
 	            $em = $this->getDoctrine()->getManager();
 	            $em->persist($review);
-	            $em->persist($rating);
+
+	            if($reviewForm["rate"]->getData() !== null && $checkReadersUniqueRating == 0) {
+	            		$em->persist($rating);
+	          	}
+
 	            $em->flush();
 
 	            return $this->redirect($request->getUri());
@@ -62,26 +74,25 @@ class BaseController extends Controller
 	public function setRating(Request $request, $ratingForm, $checkReadersUniqueRating, Book $book)
 	{
 
-		$reader = $this->getUser();
+      if ($ratingForm->isSubmitted() && $ratingForm->isValid()) 
+      {
+          if ($checkReadersUniqueRating == 0) 
+          {
+              $rating = new Rating();
+              $rating->setRate($ratingForm["rate"]->getData());
+              $rating->setReader($this->getUser());
+              $rating->setBook($book);
+              $em = $this->getDoctrine()->getManager();
+              $em->persist($rating);
+              $em->flush($rating);
 
-        if ($ratingForm->isSubmitted() && $ratingForm->isValid()) 
-        {
-            if ($checkReadersUniqueRating == 0) 
-            {            
-                $rating = new Rating();
-                $rating->setRate($ratingForm["rate"]->getData());
-                $rating->setReader($reader);
-                $rating->setBook($book);
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($rating);
-                $em->flush($rating);
+              //return $this->redirect($request->getUri());
+              return $this->redirectToRoute('book_show', array('id' => $book->getId()));
 
-                return $this->redirect($request->getUri());
-
-            } else {
-                $ratingForm->addError(new FormError('You already voted on this book!'));
-            }                
-        } 		
+          } else {
+              $ratingForm->addError(new FormError('You already voted on this book!'));
+          }                
+      } 		
 	}
 
 

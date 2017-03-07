@@ -13,15 +13,15 @@ use Doctrine\ORM\EntityRepository;
 class ReviewRepository extends EntityRepository
 {
 
-	public function getBookReviews($bookId) 
-	{
-		$bookReviews = $this->getEntityManager()->createQuery(
-			"SELECT r
-			 FROM PortalBundle:Review r 
-			 WHERE r.book = '$bookId'" 
-		)->getResult();
-		return $bookReviews;
-	}
+	// public function getBookReviews($bookId) 
+	// {
+	// 	$bookReviews = $this->getEntityManager()->createQuery(
+	// 		"SELECT r
+	// 		 FROM PortalBundle:Review r 
+	// 		 WHERE r.book = '$bookId'" 
+	// 	)->getResult();
+	// 	return $bookReviews;
+	// }
 
 	public function checkReadersUniqueReview($readerId,$bookId) {
 		$readersUniqueReview = $this->getEntityManager()->createQuery(
