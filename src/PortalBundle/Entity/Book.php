@@ -107,11 +107,17 @@ class Book
     * @ORM\OneToMany(targetEntity="Rating", mappedBy="book")
     */
     private $ratings;
+
+    /**
+    * @ORM\ManyToMany(targetEntity="FavouriteBook", mappedBy="books")
+    */
+    private $favouriteBooks;
     
     public function __construct() {
         $this->readers = new ArrayCollection();
         $this->reviews = new ArrayCollection();
         $this->ratings = new ArrayCollection();
+        $this->favouriteBooks = new ArrayCollection();
     }
 
     // -----------------------------------------

@@ -2,73 +2,40 @@
 
 {% block body %}
     <h1>Recently added books</h1>
-{% for book in books %}
-            <div class="pull-left">
-                <img src="{{ vich_uploader_asset(book, 'coverImage') | imagine_filter('thumb') }}" alt="{{ book.title }}" class="img-thumbnail" />
-            </div>     
-            <h2><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.title }}</a></h2>
-            <h3><a href="{{ path('author_show', { 'id': book.author.id }) }}">{{ book.author.name }}</a></h3>
-            {% if book.publishDate %}<p>Publish Date: {{ book.publishDate|date('Y-m-d') }}</p>{% endif %}
-            {% if book.translator %}<p>Translator: {{ book.translator.name }}</p>{% endif %}    
-            {% if book.publisher %}<p>Publisher: {{ book.publisher.name }}</p>{% endif %}
-            <p>{{ book.description }}</p>
-            <select class="showRating">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>  
-            </select>
+    {% for book in books %}
+        <div class="pull-left">
+            <img src="{{ vich_uploader_asset(book, 'coverImage') | imagine_filter('thumb') }}" alt="{{ book.title }}" class="img-thumbnail" />
+        </div>     
+        <h2><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.title }}</a></h2>
+        <h3><a href="{{ path('author_show', { 'id': book.author.id }) }}">{{ book.author.name }}</a></h3>
+        {% if book.publishDate %}<p>Publish Date: {{ book.publishDate|date('Y-m-d') }}</p>{% endif %}
+        {% if book.translator %}<p>Translator: {{ book.translator.name }}</p>{% endif %}    
+        {% if book.publisher %}<p>Publisher: {{ book.publisher.name }}</p>{% endif %}
+        <p>{{ book.description }}</p>
+        <select class="showRating">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>  
+        </select>
 
-            {% set sumratings = 0 %}
-            {% for rating in book.ratings %}
-                {% set sumratings = sumratings + rating.rate %}
-            {% endfor %}
-            
-            <span>{{ sumratings / book.ratings|length }}</span>
-             ({{book.ratings|length}} votes, {{ book.reviews|length }} reviews)
-            
-            <div class="clearfix"></div>
-            <hr>            
-{% endfor %}
- {#    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Cover</th>
-                <th>Publish Date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for book in books %}
-            <tr>
-                <td><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.id }}</a></td>
-                <td>{{ book.title }}</td>
-                <td>{{ book.description }}</td>
-                <td><img src="{{ vich_uploader_asset(book, 'coverImage') | imagine_filter('thumb') }}" alt="{{ book.title }}" /></td>
-                <td>{% if book.publishDate %}{{ book.publishDate|date('Y-m-d') }}{% endif %}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('book_show', { 'id': book.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('book_edit', { 'id': book.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
+        {% set sumratings = 0 %}
+        {% for rating in book.ratings %}
+            {% set sumratings = sumratings + rating.rate %}
         {% endfor %}
-        </tbody>
-    </table> #}
+        
+        <span>{{ sumratings / book.ratings|length }}</span>
+         ({{book.ratings|length}} votes, {{ book.reviews|length }} reviews)
+        
+        <div class="clearfix"></div>
+        <hr>            
+    {% endfor %}
 
     <a href="{{ path('book_new') }}" class="btn btn-default">Create a new book</a>
 

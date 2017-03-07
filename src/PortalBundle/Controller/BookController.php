@@ -225,4 +225,49 @@ class BookController extends BaseController
             ->getForm();
     }
 
+////////////////////////////
+
+    // /**
+    //  * Add book to favourites.
+    //  *
+    //  * @Route("/{id}/favourite", name="book_favourite")
+    //  * @Method("POST")
+    //  */
+    // public function favouriteAction(Request $request, Book $book)
+    // {
+    //     $form = $this->createFavouriteForm($book);
+    //     $form->handleRequest($request);
+
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $reader = $this->getUser();
+    //         $book->addReader($reader);
+    //         $reader->addBook($book);
+    //         $this->getDoctrine()->getManager()->persist($book);
+    //         $this->getDoctrine()->getManager()->persist($reader);
+    //         $this->getDoctrine()->getManager()->flush();
+
+    //         $request->getSession()
+    //             ->getFlashBag()
+    //             ->add('success', 'Book marked as read!');
+
+    //     }
+
+    //     return $this->redirectToRoute('book_show', array('id' => $book->getId()));
+    // }    
+
+    // /**
+    //  * Creates a form to mark book as read.
+    //  *
+    //  * @param Book $book The book entity
+    //  *
+    //  * @return \Symfony\Component\Form\Form The form
+    //  */
+    // private function createReadForm(Book $book)
+    // {
+    //     return $this->createFormBuilder()
+    //         ->setAction($this->generateUrl('book_read', array('id' => $book->getId())))
+    //         ->setMethod('POST')
+    //         ->getForm();
+    // }
+
 }

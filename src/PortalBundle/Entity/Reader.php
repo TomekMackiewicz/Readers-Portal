@@ -82,6 +82,11 @@ class Reader extends BaseUser
     * @ORM\OneToMany(targetEntity="Rating", mappedBy="reader")
     */
     private $ratings;
+
+    /**
+    * @ORM\ManyToMany(targetEntity="FavouriteBook", mappedBy="readers")
+    */
+    private $favouriteBooks;
     
     public function __construct() {
         parent::__construct();
@@ -89,6 +94,7 @@ class Reader extends BaseUser
         $this->authors = new ArrayCollection();
         $this->reviews = new ArrayCollection();
         $this->ratings = new ArrayCollection();
+        $this->favouriteBooks = new ArrayCollection();
     }
 
     // -----------------------------------------
