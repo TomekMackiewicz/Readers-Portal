@@ -5,8 +5,7 @@
         <img src="{{ vich_uploader_asset(book, 'coverImage') | imagine_filter('s_thumb') }}" alt="{{ book.title }}" class="img-thumbnail" />
     </div>     
     <h3><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.title }}</a></h3>
-    <h4><a href="{{ path('author_show', { 'id': book.author.id }) }}">{{ book.author.name }}</a></h4>
-    {% if book.publisher %}<p>Publisher: {{ book.publisher.name }}</p>{% endif %}
+    <h4>by <a href="{{ path('author_show', { 'id': book.author.id }) }}">{{ book.author.name }}</a></h4>
     <select class="showRating">
       <option value="1">1</option>
       <option value="2">2</option>

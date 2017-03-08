@@ -8,8 +8,40 @@
   color: #999;
 }
 
+a {
+  cursor: pointer;
+}
+
+.table-borderless > tbody > tr > td,
+.table-borderless > tbody > tr > th,
+.table-borderless > tfoot > tr > td,
+.table-borderless > tfoot > tr > th,
+.table-borderless > thead > tr > td,
+.table-borderless > thead > tr > th {
+    border: none;
+    padding: 0px;    
+}
+
+.table-borderless > tbody > tr > th > span:before {
+  font: normal normal normal 16px/1 FontAwesome;
+  content: '\f005';
+  color: #428bca;   
+}
+
+.progress {
+  margin-bottom: 5px;
+  background-color: #fff;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+.img-show {
+  margin-top: 20px;
+}
+
 .img-thumbnail {
-  margin-right:15px;
+  margin-right: 15px;
 }
 
 .br-theme-fontawesome-stars-o .br-widget {
@@ -17,7 +49,7 @@
   white-space: nowrap;
 }
 .br-theme-fontawesome-stars-o .br-widget a {
-  font: normal normal normal 20px/1 FontAwesome;
+  font: normal normal normal 16px/1 FontAwesome;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
   text-decoration: none;

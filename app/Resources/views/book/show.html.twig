@@ -2,18 +2,50 @@
 
 {% block body %}
 
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Rating Details</h4>
+          </div>
+          <div class="modal-body">
+            <table class="table table-borderless table-condensed">
+            {% set sum = 0 %}
+            {% for i in 1..10 %}
+                {% set singleSum = 0 %}
+                {% for rating in book.ratings %}
+                    {% if i == rating.rate %}
+                        {% set singleSum = singleSum + 1 %}
+                    {% endif %}
+                {% endfor %}
+                <tr>
+                    <th class="col-md-1">
+                        <span class="pull-left"> {{i}}</span>
+                    </th>
+                    <td class="col-md-11">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="{{singleSum}}" aria-valuemin="1" aria-valuemax="{{book.ratings|length}}" style="width: {{singleSum * 10}}%;">
+                            {{singleSum}}
+                          </div>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %} 
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="row">
         <div class="col-md-8">
-            <div class="pull-left">
-                <img src="{{ vich_uploader_asset(book, 'coverImage') | imagine_filter('thumb') }}" alt="{{ book.title }}" class="img-thumbnail" />
-            </div>    
-
+            <img src="{{ vich_uploader_asset(book, 'coverImage') | imagine_filter('thumb') }}" alt="{{ book.title }}" class="img-thumbnail img-show pull-left" />
             <h2>{{ book.title }}</h2>
-            <h3><a href="{{ path('author_show', { 'id': book.author.id }) }}">{{ book.author.name }}</a></h3>
-            {% if book.publishDate %}<p>Publish Date: {{ book.publishDate|date('Y-m-d') }}</p>{% endif %}
-            {% if book.translator %}<p>Translator: {{ book.translator.name }}</p>{% endif %}    
-            {% if book.publisher %}<p>Publisher: {{ book.publisher.name }}</p>{% endif %}
-            <p>{{ book.description }}</p>
+            <h4>by <a href="{{ path('author_show', { 'id': book.author.id }) }}">{{ book.author.name }}</a></h4>
             <select class="showRating">
               <option value="1">1</option>
               <option value="2">2</option>
@@ -33,7 +65,33 @@
             {% endfor %}
             
             <span id="avgRate">{{ (sumratings / book.ratings|length)|round(2) }}</span>
-             ({{book.ratings|length}} votes, {{ book.reviews|length }} reviews)
+             ({{book.ratings|length}} ratings, {{ book.reviews|length }} reviews)
+            <a id="ratingDetails" data-toggle="modal" data-target="#myModal">
+                <i class="fa fa-bar-chart" aria-hidden="true"></i> Rating details
+            </a>
+
+
+{# {% for i in 1..10 %}
+    {% set sum = 0 %}
+    {% for rating in book.ratings %}
+        {% if i == rating.rate %}
+            {% set sum = sum + 1 %}
+        {% endif %}
+    {% endfor %}
+    <i class="fa fa-star-o" aria-hidden="true"></i> {{i}}
+    <div class="progress">
+      <div class="progress-bar" role="progressbar" aria-valuenow="{{ sum }}" aria-valuemin="0" aria-valuemax="10" style="width: {{ sum * 10}}%;">
+        {{sum}}
+      </div>
+    </div>
+{% endfor %}  #}
+
+            <hr> 
+            <p>{{ book.description }}</p>
+            <hr>
+            {% if book.publishDate %}<small>Publish Date: {{ book.publishDate|date('Y-m-d') }}</small><br>{% endif %}
+            {% if book.translator %}<small>Translator: {{ book.translator.name }}</small><br>{% endif %}    
+            {% if book.publisher %}<small>Publisher: {{ book.publisher.name }}</small>{% endif %}
 
             <div class="clearfix"></div>
 
