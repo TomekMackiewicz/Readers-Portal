@@ -4,7 +4,7 @@
     <h1>Recently added books</h1>
     {% for book in books %}
         <div class="pull-left">
-            <img src="{{ vich_uploader_asset(book, 'coverImage') | imagine_filter('thumb') }}" alt="{{ book.title }}" class="img-thumbnail" />
+            <img src="{{ vich_uploader_asset(book, 'coverImage') | imagine_filter('s_thumb') }}" alt="{{ book.title }}" class="img-thumbnail" />
         </div>     
         <h2><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.title }}</a></h2>
         <h3><a href="{{ path('author_show', { 'id': book.author.id }) }}">{{ book.author.name }}</a></h3>

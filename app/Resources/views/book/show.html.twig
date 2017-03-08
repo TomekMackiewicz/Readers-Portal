@@ -119,10 +119,12 @@
             {% endif %}
 
             {{ form_start(read_form, {'attr': {'class': 'form-inline'} }) }}
-                <input type="submit" value="Mark as Read" class="btn btn-success">
+                <input type="submit" value="Mark as Read" class="btn btn-primary">
             {{ form_end(read_form) }}
 
-            <a href="{{ path('book_index') }}" class="btn btn-default">Add to favourite</a>
+            {{ form_start(favourite_form, {'attr': {'class': 'form-inline'} }) }}
+                <input type="submit" value="Add to favourites" class="btn btn-success">
+            {{ form_end(favourite_form) }}
 
         </div>
     </div>        

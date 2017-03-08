@@ -314,37 +314,37 @@ class Reader extends BaseUser
         return $this->ratings;
     }
 
-    /**
-     * Add favouriteBook
-     *
-     * @param \PortalBundle\Entity\FavouriteBook $favouriteBook
-     *
-     * @return Reader
-     */
-    public function addFavouriteBook(\PortalBundle\Entity\FavouriteBook $favouriteBook)
-    {
-        $this->favouriteBooks[] = $favouriteBook;
+    // /**
+    //  * Add favouriteBook
+    //  *
+    //  * @param \PortalBundle\Entity\FavouriteBook $favouriteBook
+    //  *
+    //  * @return Reader
+    //  */
+    // public function addFavouriteBook(\PortalBundle\Entity\FavouriteBook $favouriteBook)
+    // {
+    //     $this->favouriteBooks[] = $favouriteBook;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    /**
-     * Remove favouriteBook
-     *
-     * @param \PortalBundle\Entity\FavouriteBook $favouriteBook
-     */
-    public function removeFavouriteBook(\PortalBundle\Entity\FavouriteBook $favouriteBook)
-    {
-        $this->favouriteBooks->removeElement($favouriteBook);
-    }
+    // *
+    //  * Remove favouriteBook
+    //  *
+    //  * @param \PortalBundle\Entity\FavouriteBook $favouriteBook
+     
+    // public function removeFavouriteBook(\PortalBundle\Entity\FavouriteBook $favouriteBook)
+    // {
+    //     $this->favouriteBooks->removeElement($favouriteBook);
+    // }
 
-    /**
-     * Get favouriteBooks
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFavouriteBooks()
-    {
-        return $this->favouriteBooks;
-    }
+    // /**
+    //  * Get favouriteBooks
+    //  *
+    //  * @return \Doctrine\Common\Collections\Collection
+    //  */
+    // public function getFavouriteBooks()
+    // {
+    //     return $this->favouriteBooks;
+    // }
 }

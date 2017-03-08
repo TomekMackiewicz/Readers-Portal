@@ -5,6 +5,7 @@ namespace PortalBundle\Controller;
 use PortalBundle\Entity\Book;
 use PortalBundle\Entity\Rating;
 use PortalBundle\Entity\Review;
+use PortalBundle\Entity\FavouriteBook;
 use Symfony\Component\Form\FormError;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -101,6 +102,7 @@ class BookController extends BaseController
     {
         $deleteForm = $this->createDeleteForm($book);
         $readForm = $this->createReadForm($book);
+        $favouriteForm = $this->createFavouriteForm($book);
         $reader = $this->getUser();
         $reviewForm = $this->createForm('PortalBundle\Form\ReviewType')->handleRequest($request);
         $ratingForm = $this->createForm('PortalBundle\Form\RatingType')->handleRequest($request);
@@ -120,6 +122,7 @@ class BookController extends BaseController
             'rating_form' => $ratingForm->createView(),
             'review_form' => $reviewForm->createView(),
             'read_form' => $readForm->createView(),
+            'favourite_form' => $favouriteForm->createView(),
         ));
     }
 
@@ -227,47 +230,47 @@ class BookController extends BaseController
 
 ////////////////////////////
 
-    // /**
-    //  * Add book to favourites.
-    //  *
-    //  * @Route("/{id}/favourite", name="book_favourite")
-    //  * @Method("POST")
-    //  */
-    // public function favouriteAction(Request $request, Book $book)
-    // {
-    //     $form = $this->createFavouriteForm($book);
-    //     $form->handleRequest($request);
+    /**
+     * Add book to favourites.
+     *
+     * @Route("/{id}/favourite", name="book_favourite")
+     * @Method("POST")
+     */
+    public function favouriteAction(Request $request, Book $book)
+    {
+        $form = $this->createFavouriteForm($book);
+        $form->handleRequest($request);
 
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $reader = $this->getUser();
-    //         $book->addReader($reader);
-    //         $reader->addBook($book);
-    //         $this->getDoctrine()->getManager()->persist($book);
-    //         $this->getDoctrine()->getManager()->persist($reader);
-    //         $this->getDoctrine()->getManager()->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $favouriteBook = new FavouriteBook();
+            $favouriteBook->setBook($book);
+            $favouriteBook->setReader($this->getUser());            
 
-    //         $request->getSession()
-    //             ->getFlashBag()
-    //             ->add('success', 'Book marked as read!');
+            $this->getDoctrine()->getManager()->persist($favouriteBook);
+            $this->getDoctrine()->getManager()->flush();
 
-    //     }
+            $request->getSession()
+                ->getFlashBag()
+                ->add('success', 'Book added to favourites!');
 
-    //     return $this->redirectToRoute('book_show', array('id' => $book->getId()));
-    // }    
+        }
 
-    // /**
-    //  * Creates a form to mark book as read.
-    //  *
-    //  * @param Book $book The book entity
-    //  *
-    //  * @return \Symfony\Component\Form\Form The form
-    //  */
-    // private function createReadForm(Book $book)
-    // {
-    //     return $this->createFormBuilder()
-    //         ->setAction($this->generateUrl('book_read', array('id' => $book->getId())))
-    //         ->setMethod('POST')
-    //         ->getForm();
-    // }
+        return $this->redirectToRoute('book_show', array('id' => $book->getId()));
+    }    
+
+    /**
+     * Creates a form to add book to favourites.
+     *
+     * @param Book $book The book entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createFavouriteForm(Book $book)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('book_favourite', array('id' => $book->getId())))
+            ->setMethod('POST')
+            ->getForm();
+    }
 
 }

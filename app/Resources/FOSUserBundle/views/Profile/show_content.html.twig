@@ -3,12 +3,40 @@
 <div class="fos_user_user_show">
     <p>{{ 'profile.show.username'|trans }}: {{ reader.username }}</p>
     <p>{{ 'profile.show.email'|trans }}: {{ reader.email }}</p>
-    <p>My books</p>
-    {% for book in books %}
-    	{{book.title}}<br>
+<hr>
+		<p>Favourite books ({{reader.favouriteBooks|length}})</p> 
+		<ul>
+    {% for book in reader.favouriteBooks %}
+    	<li>{{book.book.title}}</li>
+    {% endfor %}	
+    </ul>	
+<hr>
+		<p>Books I read now ()</p>
+<hr>  
+		<p>Books I want to read ()</p>
+<hr>    
+    <p>Books already read ({{reader.books|length}})</p>
+    <ul>
+    {% for book in reader.books %}
+    	<li>{{book.title}}</li>
     {% endfor %}
-
-    <p>My reviews</p>
-    <p>My ratings</p>
-
+  </ul>
+<hr>
+    <p>My reviews ({{reader.reviews|length}})</p>
+    <ul>
+    {% for review in reader.reviews %}
+    	<li>About: {{review.book.title}}, published: {{review.publishDate|date('Y-m-d')}}</li>
+    {% endfor %}
+  </ul>    
+<hr>    
+    <p>My ratings ({{reader.ratings|length}})</p>
+    <ul>
+    {% for rating in reader.ratings %}
+    	<li>I rated {{rating.book.title}} on {{rating.rate}}</li>
+    {% endfor %}
+  </ul>     
+<hr>    
+    <p>My favourite authors ()</p>
+<hr>    
+    <p>My favourite quotes ()</p>    
 </div>

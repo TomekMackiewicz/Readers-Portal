@@ -55,16 +55,12 @@ class ProfileController extends Controller
      */
     public function showAction()
     {
-        $reader = $this->getUser();
-        if (!is_object($reader) || !$reader instanceof UserInterface) {
+        if (!is_object($this->getUser()) || !$this->getUser() instanceof UserInterface) {
             throw new AccessDeniedException('This reader does not have access to this section.');
         }
 
-        $books = $reader->getBooks();
-
         return $this->render('@FOSUser/Profile/show.html.twig', array(
-            'reader' => $reader,
-            'books' =>$books
+            'reader' => $this->getUser()
         ));
     }
 
