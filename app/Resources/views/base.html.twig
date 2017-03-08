@@ -26,22 +26,85 @@
               <a class="navbar-brand" href="{{path('portal_default_index')}}">Readers Portal <i class="fa fa-book" aria-hidden="true"></i></a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li><a href="{{ path('book_index') }}">Books</a></li>
-        <li><a href="{{ path('author_index') }}">Authors</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">One more separated link</a></li>
+              <ul class="nav navbar-nav">
+{#                 <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Browse <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Reccomendations</a></li>
+                    <li><a href="{{ path('book_index') }}">Recent</a></li>
+                    <li class="dropdown-submenu"><a href="#">Genres</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">One more separated link</a></li>
+                  </ul>
+                </li>        
+                <li><a href="{{ path('author_index') }}">Authors</a></li> #}
+
+        <li class="dropdown mega-dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Browse <span class="caret"></span></a>
+
+          <ul class="dropdown-menu mega-dropdown-menu row">
+            <li class="col-sm-3">
+              <ul>
+                <li class="dropdown-header">Recent</li>
+                <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                  <div class="carousel-inner">
+                    {{ render(controller('PortalBundle:Base:recent')) }}
+                  </div>
+                </div>
+{#                 <li class="divider"></li>
+                <li><a href="#">View all Collection <span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li> #}
+              </ul>
+            </li>
+            <li class="col-sm-3">
+              <ul>
+                <li class="dropdown-header">Genres</li>
+                <li><a href="#">Crime</a></li>
+                <li><a href="#">Fantasy</a></li>
+                <li><a href="#">Mistery</a></li>
+                <li><a href="#">Art</a></li>
+                <li><a href="#">Biography</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">Reccomendations</li>
+                <li><a href="#">Reccomended</a></li>
+              </ul>
+            </li>
+            <li class="col-sm-3">
+              <ul>
+                <li class="dropdown-header">Community</li>
+                <li><a href="#">Discussions</a></li>
+                <li><a href="#">Quotes</a></li>
+                <li><a href="#">Creative Writing</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">Quotes</li>
+                <li><a href="#">Popular</a></li>
+                <li><a href="#">Recent</a></li>
+                <li><a href="#">My authors</a></li>
+              </ul>
+            </li>
+            <li class="col-sm-3">
+              <ul>
+                <li class="dropdown-header">Top 100</li>
+                <li><a href="#">Top rated</a></li>
+                <li><a href="#">Most popular</a></li>
+                <li><a href="#">Most discussed</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">Newsletter</li>
+                <form class="form" role="form">
+                  <div class="form-group">
+                    <label class="sr-only" for="email">Email address</label>
+                    <input type="email" class="form-control" id="email" placeholder="Enter email">
+                  </div>
+                  <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                </form>
+              </ul>
+            </li>
           </ul>
+
         </li>
-      </ul>              
+
+              </ul>             
               <ul class="nav navbar-nav navbar-right">                
               {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}              
                 <li class="dropdown">
@@ -95,6 +158,8 @@
             <script src="{{ asset('bundles/portal/js/jquery.barrating.min.js') }}"></script>
             <script src="{{ asset('bundles/portal/js/scripts.js') }}"></script>
             <script>
+
+              $(".carousel-inner").find(".item:first").addClass("active");
 
               $(function() {
                 $( ".searchBook" ).autocomplete({

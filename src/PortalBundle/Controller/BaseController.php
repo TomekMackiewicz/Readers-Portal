@@ -14,6 +14,18 @@ use Symfony\Component\HttpFoundation\Request;
 class BaseController extends Controller
 {
 
+  public function recentAction()
+  {
+      $books = $this
+          ->getDoctrine()
+          ->getManager()
+          ->getRepository('PortalBundle:Book')->findBy(array(), array('publishDate' => 'DESC'));
+
+      return $this->render('book/recent.html.twig', array(
+          'books' => $books,
+      ));
+  }
+
 	public function getRatingRepo() 
 	{
 		$ratingRepo = $this->getDoctrine()->getManager()->getRepository('PortalBundle:Rating');

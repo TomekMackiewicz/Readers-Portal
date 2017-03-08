@@ -32,7 +32,7 @@
                 {% set sumratings = sumratings + rating.rate %}
             {% endfor %}
             
-            <span id="avgRate">{{ sumratings / book.ratings|length }}</span>
+            <span id="avgRate">{{ (sumratings / book.ratings|length)|round(2) }}</span>
              ({{book.ratings|length}} votes, {{ book.reviews|length }} reviews)
 
             <div class="clearfix"></div>

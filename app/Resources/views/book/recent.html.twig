@@ -1,0 +1,32 @@
+{% for book in books %}
+  <div class="item">
+    <br>
+    <div class="pull-left">
+        <img src="{{ vich_uploader_asset(book, 'coverImage') | imagine_filter('s_thumb') }}" alt="{{ book.title }}" class="img-thumbnail" />
+    </div>     
+    <h3><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.title }}</a></h3>
+    <h4><a href="{{ path('author_show', { 'id': book.author.id }) }}">{{ book.author.name }}</a></h4>
+    {% if book.publisher %}<p>Publisher: {{ book.publisher.name }}</p>{% endif %}
+    <select class="showRating">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>  
+    </select>
+
+    {% set sumratings = 0 %}
+    {% for rating in book.ratings %}
+        {% set sumratings = sumratings + rating.rate %}
+    {% endfor %}
+    
+    <span>{{ (sumratings / book.ratings|length)|round(2) }}</span>
+     ({{book.ratings|length}} votes, {{ book.reviews|length }} reviews)
+    
+  </div>           
+{% endfor %}

@@ -16,11 +16,17 @@
 		<p>Books I want to read ()</p>
 <hr>    
     <p>Books already read ({{reader.books|length}})</p>
-    <ul>
+
     {% for book in reader.books %}
-    	<li>{{book.title}}</li>
+        <div class="pull-left">
+            <img src="{{ vich_uploader_asset(book, 'coverImage') | imagine_filter('s_thumb') }}" alt="{{ book.title }}" class="img-thumbnail" />
+        </div>     
+        <h3><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.title }}</a></h3>
+        <h4><a href="{{ path('author_show', { 'id': book.author.id }) }}">{{ book.author.name }}</a></h4>
+        <div class="clearfix"></div>
+        <hr>    	
     {% endfor %}
-  </ul>
+
 <hr>
     <p>My reviews ({{reader.reviews|length}})</p>
     <ul>
