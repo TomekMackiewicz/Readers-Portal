@@ -6,6 +6,7 @@ use PortalBundle\Entity\Book;
 use PortalBundle\Entity\Rating;
 use PortalBundle\Entity\Review;
 use PortalBundle\Entity\FavouriteBook;
+use PortalBundle\Entity\WantedBook;
 use Symfony\Component\Form\FormError;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -103,6 +104,7 @@ class BookController extends BaseController
         $deleteForm = $this->createDeleteForm($book);
         $readForm = $this->createReadForm($book);
         $favouriteForm = $this->createFavouriteForm($book);
+        $wantedForm = $this->createWantedForm($book);
         $reader = $this->getUser();
         $reviewForm = $this->createForm('PortalBundle\Form\ReviewType')->handleRequest($request);
         $ratingForm = $this->createForm('PortalBundle\Form\RatingType')->handleRequest($request);
@@ -123,6 +125,7 @@ class BookController extends BaseController
             'review_form' => $reviewForm->createView(),
             'read_form' => $readForm->createView(),
             'favourite_form' => $favouriteForm->createView(),
+            'wanted_form' => $wantedForm->createView(),
         ));
     }
 
@@ -197,17 +200,24 @@ class BookController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $reader = $this->getUser();
-            $book->addReader($reader);
-            $reader->addBook($book);
+            $wantedBook = $this
+                ->getDoctrine()
+                ->getManager()
+                ->getRepository('PortalBundle:WantedBook')->findOneBy(array(
+                    'reader' => $this->getUser()->getId(), 
+                    'book' => $book->getId()
+                ));
+            $this->getDoctrine()->getManager()->remove($wantedBook);    
+
+            $book->addReader($this->getUser());
+            $this->getUser()->addBook($book);
             $this->getDoctrine()->getManager()->persist($book);
-            $this->getDoctrine()->getManager()->persist($reader);
+            $this->getDoctrine()->getManager()->persist($this->getUser());
             $this->getDoctrine()->getManager()->flush();
 
             $request->getSession()
                 ->getFlashBag()
                 ->add('success', 'Book marked as read!');
-
         }
 
         return $this->redirectToRoute('book_show', array('id' => $book->getId()));
@@ -228,7 +238,52 @@ class BookController extends BaseController
             ->getForm();
     }
 
-////////////////////////////
+    /**
+     * Add book to wanted.
+     *
+     * @Route("/{id}/wanted", name="book_wanted")
+     * @Method("POST")
+     */
+    public function wantedAction(Request $request, Book $book)
+    {
+        $form = $this->createWantedForm($book);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $wantedBook = new WantedBook();
+            $book->removeReader($this->getUser());
+            $this->getUser()->removeBook($book);
+            $wantedBook->setBook($book);
+            $wantedBook->setReader($this->getUser());            
+
+            $this->getDoctrine()->getManager()->persist($book);
+            $this->getDoctrine()->getManager()->persist($this->getUser());
+            $this->getDoctrine()->getManager()->persist($wantedBook);
+            $this->getDoctrine()->getManager()->flush();
+
+            $request->getSession()
+                ->getFlashBag()
+                ->add('success', 'Book added to wanted!');
+
+        }
+
+        return $this->redirectToRoute('book_show', array('id' => $book->getId()));
+    }    
+
+    /**
+     * Creates a form to add book to wanted.
+     *
+     * @param Book $book The book entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createWantedForm(Book $book)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('book_wanted', array('id' => $book->getId())))
+            ->setMethod('POST')
+            ->getForm();
+    }   
 
     /**
      * Add book to favourites.

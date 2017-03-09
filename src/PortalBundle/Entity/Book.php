@@ -112,12 +112,18 @@ class Book
      * @ORM\OneToMany(targetEntity="FavouriteBook", mappedBy="book", cascade={"persist"})
      */
     private $favouriteBooks;
+
+    /**
+     * @ORM\OneToMany(targetEntity="WantedBook", mappedBy="book", cascade={"persist"})
+     */
+    private $wantedBooks;
     
     public function __construct() {
         $this->readers = new ArrayCollection();
         $this->reviews = new ArrayCollection();
         $this->ratings = new ArrayCollection();
         $this->favouriteBooks = new ArrayCollection();
+        $this->wantedBooks = new ArrayCollection();
     }
 
     // -----------------------------------------
@@ -454,4 +460,39 @@ class Book
     {
         return $this->favouriteBooks;
     }
+
+    /**
+     * Add wantedBook
+     *
+     * @param \PortalBundle\Entity\WantedBook $wantedBook
+     *
+     * @return Book
+     */
+    public function addWantedBook(\PortalBundle\Entity\WantedBook $wantedBook)
+    {
+        $this->wantedBooks[] = $wantedBook;
+
+        return $this;
+    }
+
+    /**
+     * Remove wantedBook
+     *
+     * @param \PortalBundle\Entity\WantedBook $wantedBook
+     */
+    public function removeWantedBook(\PortalBundle\Entity\WantedBook $wantedBook)
+    {
+        $this->wantedBooks->removeElement($wantedBook);
+    }
+
+    /**
+     * Get WantedBooks
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getWantedBooks()
+    {
+        return $this->wantedBooks;
+    }
+
 }

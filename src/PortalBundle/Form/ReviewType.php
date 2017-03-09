@@ -17,7 +17,7 @@ class ReviewType extends AbstractType
     {
         $builder
             ->add('contents', null, array(
-                'label' => 'Add review'
+                'label' => false
             ))
             ->add('rate', ChoiceType::class, array(
                 'choices'  => array(

@@ -3,15 +3,15 @@
 namespace PortalBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Rating
+ * Wanted
  *
- * @ORM\Table(name="ratings")
- * @ORM\Entity(repositoryClass="PortalBundle\Repository\RatingRepository")
+ * @ORM\Table(name="wantedBooks")
+ * @ORM\Entity(repositoryClass="PortalBundle\Repository\WantedBookRepository")
  */
-class Rating
+class WantedBook
 {
     /**
      * @var int
@@ -20,18 +20,7 @@ class Rating
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="rate", type="integer")
-     * @Assert\Type(
-     *   type="integer",
-     *   message="The value {{ value }} is not a valid {{ type }}."
-     * )     
-     */
-    private $rate;
+    private $id;   
 
     // -----------------------------------------
     //
@@ -40,15 +29,15 @@ class Rating
     // -----------------------------------------
 
     /**
-    * @ORM\ManyToOne(targetEntity="Reader", inversedBy="ratings")
-    * @ORM\JoinColumn(name="readerId", referencedColumnName="id", onDelete="CASCADE")
-    */
+     * @ORM\ManyToOne(targetEntity="Reader", inversedBy="wantedBooks")
+     * @ORM\JoinColumn(name="readerId", referencedColumnName="id")
+     */
     private $reader;
 
     /**
-    * @ORM\ManyToOne(targetEntity="Book", inversedBy="ratings")
-    * @ORM\JoinColumn(name="bookId", referencedColumnName="id", onDelete="CASCADE")
-    */
+     * @ORM\ManyToOne(targetEntity="Book", inversedBy="wantedBooks")
+     * @ORM\JoinColumn(name="bookId", referencedColumnName="id")
+     */
     private $book;
 
     // -----------------------------------------
@@ -60,7 +49,7 @@ class Rating
     /**
      * Get id
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -68,33 +57,11 @@ class Rating
     }
 
     /**
-     * Set rate
-     *
-     * @param integer $rate
-     * @return Rating
-     */
-    public function setRate($rate)
-    {
-        $this->rate = $rate;
-
-        return $this;
-    }
-
-    /**
-     * Get rate
-     *
-     * @return integer 
-     */
-    public function getRate()
-    {
-        return $this->rate;
-    }
-
-    /**
      * Set reader
      *
      * @param \PortalBundle\Entity\Reader $reader
-     * @return Rating
+     *
+     * @return WantedBook
      */
     public function setReader(\PortalBundle\Entity\Reader $reader = null)
     {
@@ -106,7 +73,7 @@ class Rating
     /**
      * Get reader
      *
-     * @return \PortalBundle\Entity\Reader 
+     * @return \PortalBundle\Entity\Reader
      */
     public function getReader()
     {
@@ -117,7 +84,8 @@ class Rating
      * Set book
      *
      * @param \PortalBundle\Entity\Book $book
-     * @return Rating
+     *
+     * @return WantedBook
      */
     public function setBook(\PortalBundle\Entity\Book $book = null)
     {
@@ -129,7 +97,7 @@ class Rating
     /**
      * Get book
      *
-     * @return \PortalBundle\Entity\Book 
+     * @return \PortalBundle\Entity\Book
      */
     public function getBook()
     {
