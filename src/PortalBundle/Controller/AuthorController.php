@@ -62,6 +62,34 @@ class AuthorController extends Controller
     }
 
     /**
+     * @Route("/form_search", name="author_form_search")
+     * @Method("GET")
+     */
+    public function formSearchAction(Request $request)
+    {
+        $source = array();
+        $term = trim(strip_tags($request->get('term')));
+
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('PortalBundle:Author')->createQueryBuilder('a')
+            ->where('a.name LIKE :name')
+            ->setParameter('name', '%'.$term.'%')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+
+        foreach ($entities as $entity)
+        {
+            $source[] = $entity->getName();
+        }
+
+        $response = new JsonResponse();
+        $response->setData($source);
+
+        return $response;
+    }
+
+    /**
      * Creates a new author entity.
      *
      * @Route("/new", name="author_new")

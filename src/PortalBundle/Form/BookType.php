@@ -2,6 +2,7 @@
 
 namespace PortalBundle\Form;
 
+use PortalBundle\Form\DataTransformer\TextToAuthorTransformer;
 use PortalBundle\Form\DataTransformer\TextToPublisherTransformer;
 use PortalBundle\Form\DataTransformer\TextToTranslatorTransformer;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -48,18 +49,9 @@ class BookType extends AbstractType
                 'attr'=> ['class'=>'datepicker'],
                 'required' => true
             )) 
-            // ->add('addDate',null,array(
-            //     'label' => false, 
-            //     'attr'=>array('style'=>'display:none;')
-            // ))           
-            ->add('author', EntityType::class, array(
-                'class' => 'PortalBundle:Author',
-                'choice_label' => 'name'
-            ))          
-            // ->add('translator', EntityType::class, array(
-            //     'class' => 'PortalBundle:Translator',
-            //     'choice_label' => 'name'
-            // ))
+            ->add('author', TextType::class, array(
+                'attr'=>array('class'=>'formSearchAuthor')
+            ))             
             ->add('translator', TextType::class, array(
                 'attr'=>array('class'=>'searchTranslator')
             ))            
@@ -68,6 +60,8 @@ class BookType extends AbstractType
             ))                
             ->add('isbn');
 
+        $builder->get('author')
+            ->addModelTransformer(new TextToAuthorTransformer($this->manager)); 
         $builder->get('publisher')
             ->addModelTransformer(new TextToPublisherTransformer($this->manager)); 
         $builder->get('translator')

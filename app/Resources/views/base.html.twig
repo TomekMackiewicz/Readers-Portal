@@ -166,24 +166,20 @@
               });
 
               $(function() {
+                $( ".formSearchAuthor" ).autocomplete({
+                  source: "{{ path('author_form_search') }}"                
+                });
+              });
+
+              $(function() {
                 $( ".searchTranslator" ).autocomplete({
-                  source: "{{ path('translator_search') }}"
-                  // select: function( event, ui ) { 
-                  //     var url = "{{ path('author_show', {'id':"id"}) }}";
-                  //     url = url.replace("id", ui.item.value);
-                  //     window.location.href = url;
-                  // }                  
+                  source: "{{ path('translator_search') }}"                
                 });
               });
 
               $(function() {
                 $( ".searchPublisher" ).autocomplete({
-                  source: "{{ path('publisher_search') }}"
-                  // select: function( event, ui ) { 
-                  //     var url = "{{ path('author_show', {'id':"id"}) }}";
-                  //     url = url.replace("id", ui.item.value);
-                  //     window.location.href = url;
-                  // }                  
+                  source: "{{ path('publisher_search') }}"                  
                 });
               });
 

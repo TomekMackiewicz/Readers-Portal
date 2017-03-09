@@ -51,7 +51,7 @@ class BaseController extends Controller
 	            if($checkReadersUniqueRating == 0) {
 	            	$review->setRate($reviewForm["rate"]->getData());
 	            } else {
-	            	$reviewForm->addError(new FormError('You already voted on this book!'));
+	            	$reviewForm->addError(new FormError('You already rated this book!'));
 	            }
 	            
 	            $review->setReader($reader);
