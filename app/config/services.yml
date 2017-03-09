@@ -20,3 +20,8 @@ services:
         class: PortalBundle\Form\ReaderType
         tags:
             - { name: form.type, alias: app_user_profile }
+    app.form.book:
+        class: PortalBundle\Form\BookType
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: form.type }            

@@ -5,7 +5,9 @@ namespace PortalBundle\Controller;
 use PortalBundle\Entity\Publisher;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Publisher controller.
@@ -29,6 +31,34 @@ class PublisherController extends Controller
         return $this->render('publisher/index.html.twig', array(
             'publishers' => $publishers,
         ));
+    }
+
+    /**
+     * @Route("/search", name="publisher_search")
+     * @Method("GET")
+     */
+    public function searchAction(Request $request)
+    {
+        $source = array();
+        $term = trim(strip_tags($request->get('term')));
+
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('PortalBundle:Publisher')->createQueryBuilder('p')
+            ->where('p.name LIKE :name')
+            ->setParameter('name', '%'.$term.'%')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+
+        foreach ($entities as $entity)
+        {
+            $source[] = $entity->getName();
+        }
+
+        $response = new JsonResponse();
+        $response->setData($source);
+
+        return $response;
     }
 
     /**

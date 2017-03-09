@@ -165,6 +165,29 @@
                 });
               });
 
+              $(function() {
+                $( ".searchTranslator" ).autocomplete({
+                  source: "{{ path('translator_search') }}"
+                  // select: function( event, ui ) { 
+                  //     var url = "{{ path('author_show', {'id':"id"}) }}";
+                  //     url = url.replace("id", ui.item.value);
+                  //     window.location.href = url;
+                  // }                  
+                });
+              });
+
+              $(function() {
+                $( ".searchPublisher" ).autocomplete({
+                  source: "{{ path('publisher_search') }}"
+                  // select: function( event, ui ) { 
+                  //     var url = "{{ path('author_show', {'id':"id"}) }}";
+                  //     url = url.replace("id", ui.item.value);
+                  //     window.location.href = url;
+                  // }                  
+                });
+              });
+
+
             </script>
         {% endblock %}
     </body>

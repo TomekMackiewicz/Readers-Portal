@@ -45,6 +45,16 @@ class Book
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="isbn", type="string", length=13, nullable=true)
+     * @Assert\Isbn(
+     *     message = "This value should match ISBN format."
+     * )        
+     */
+    private $isbn;
+
+    /**
+     * @var string
      * 
      * @Vich\UploadableField(mapping="book_image", fileNameProperty="imageName")
      * 
@@ -68,6 +78,16 @@ class Book
      * )          
      */     
     private $publishDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="addDate", type="date", nullable=true)
+     * @Assert\Date()(
+     *  message = "Invalid value (expected: date format)."
+     * )          
+     */     
+    private $addDate;
 
     // -----------------------------------------
     //
@@ -195,6 +215,29 @@ class Book
     }
 
     /**
+     * Set isbn
+     *
+     * @param string $isbn
+     * @return Book
+     */
+    public function setIsbn($isbn)
+    {
+        $this->isbn = $isbn;
+
+        return $this;
+    }
+
+    /**
+     * Get isbn
+     *
+     * @return string 
+     */
+    public function getIsbn()
+    {
+        return $this->isbn;
+    }
+
+    /**
      * Set publishDate
      *
      * @param \DateTime $publishDate
@@ -215,6 +258,29 @@ class Book
     public function getPublishDate()
     {
         return $this->publishDate;
+    }
+
+    /**
+     * Set addDate
+     *
+     * @param \DateTime $addDate
+     * @return Book
+     */
+    public function setAddDate($addDate)
+    {
+        $this->addDate = $addDate;
+
+        return $this;
+    }
+
+    /**
+     * Get addDate
+     *
+     * @return \DateTime 
+     */
+    public function getAddDate()
+    {
+        return $this->addDate;
     }
 
     /**

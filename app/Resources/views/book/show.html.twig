@@ -64,18 +64,20 @@
                 {% set sumratings = sumratings + rating.rate %}
             {% endfor %}
             
-            <span id="avgRate">{{ (sumratings / book.ratings|length)|round(2) }}</span>
-             ({{book.ratings|length}} ratings, {{ book.reviews|length }} reviews)
-            <a id="ratingDetails" data-toggle="modal" data-target="#myModal">
-                <i class="fa fa-bar-chart" aria-hidden="true"></i> Rating details
-            </a>
+            {% if book.ratings|length > 0 %}
+                <span id="avgRate">{{ (sumratings / book.ratings|length)|round(2) }}</span>
+                 ({{book.ratings|length}} ratings, {{ book.reviews|length }} reviews)
+                <a id="ratingDetails" data-toggle="modal" data-target="#myModal">
+                    <i class="fa fa-bar-chart" aria-hidden="true"></i> Rating details
+                </a>
+            {% endif %}
             <hr> 
             <p>{{ book.description }}</p>
             <hr>
             {% if book.publishDate %}<small>Publish Date: {{ book.publishDate|date('Y-m-d') }}</small><br>{% endif %}
             {% if book.translator %}<small>Translator: {{ book.translator.name }}</small><br>{% endif %}    
             {% if book.publisher %}<small>Publisher: {{ book.publisher.name }}</small>{% endif %}<br>
-            <small>ISBN:</small><br>
+            <small>ISBN: {{ book.isbn }}</small><br>
             <small>Genres:</small><br>
             <small>Tags:</small>
             <hr>

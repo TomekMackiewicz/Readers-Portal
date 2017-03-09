@@ -8,6 +8,8 @@ use PortalBundle\Entity\Review;
 use PortalBundle\Entity\FavouriteBook;
 use PortalBundle\Entity\WantedBook;
 use PortalBundle\Entity\CurrentBook;
+use PortalBundle\Entity\Translator;
+use PortalBundle\Entity\Publisher;
 use Symfony\Component\Form\FormError;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -81,7 +83,7 @@ class BookController extends BaseController
         $form = $this->createForm('PortalBundle\Form\BookType', $book);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {            
             $this->getDoctrine()->getManager()->persist($book);
             $this->getDoctrine()->getManager()->flush($book);
 

@@ -2,15 +2,27 @@
 
 namespace PortalBundle\Form;
 
+use PortalBundle\Form\DataTransformer\TextToPublisherTransformer;
+use PortalBundle\Form\DataTransformer\TextToTranslatorTransformer;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class BookType extends AbstractType
 {
+
+    private $manager;
+
+    public function __construct(ObjectManager $manager)
+    {
+        $this->manager = $manager;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -25,23 +37,41 @@ class BookType extends AbstractType
             ))
             ->add('imageName')
             ->add('publishDate', DateType::class, array(
-                'label' => 'Date',
+                'label' => 'Publish Year',
                 'widget' => 'single_text',
                 'attr'=> ['class'=>'datepicker'],
-                'required' => false
+                'required' => true
             ))
+            ->add('addDate', DateType::class, array(
+                'label' => 'Add Date',
+                'widget' => 'single_text',
+                'attr'=> ['class'=>'datepicker'],
+                'required' => true
+            )) 
+            // ->add('addDate',null,array(
+            //     'label' => false, 
+            //     'attr'=>array('style'=>'display:none;')
+            // ))           
             ->add('author', EntityType::class, array(
                 'class' => 'PortalBundle:Author',
                 'choice_label' => 'name'
             ))          
-            ->add('translator', EntityType::class, array(
-                'class' => 'PortalBundle:Translator',
-                'choice_label' => 'name'
-            ))
-            ->add('publisher', EntityType::class, array(
-                'class' => 'PortalBundle:Publisher',
-                'choice_label' => 'name'
-            ));
+            // ->add('translator', EntityType::class, array(
+            //     'class' => 'PortalBundle:Translator',
+            //     'choice_label' => 'name'
+            // ))
+            ->add('translator', TextType::class, array(
+                'attr'=>array('class'=>'searchTranslator')
+            ))            
+            ->add('publisher', TextType::class, array(
+                'attr'=>array('class'=>'searchPublisher')
+            ))                
+            ->add('isbn');
+
+        $builder->get('publisher')
+            ->addModelTransformer(new TextToPublisherTransformer($this->manager)); 
+        $builder->get('translator')
+            ->addModelTransformer(new TextToTranslatorTransformer($this->manager));               
     }
     
     /**
