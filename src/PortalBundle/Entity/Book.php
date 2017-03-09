@@ -117,13 +117,19 @@ class Book
      * @ORM\OneToMany(targetEntity="WantedBook", mappedBy="book", cascade={"persist"})
      */
     private $wantedBooks;
-    
+ 
+    /**
+     * @ORM\OneToMany(targetEntity="CurrentBook", mappedBy="book", cascade={"persist"})
+     */
+    private $currentBooks;
+
     public function __construct() {
         $this->readers = new ArrayCollection();
         $this->reviews = new ArrayCollection();
         $this->ratings = new ArrayCollection();
         $this->favouriteBooks = new ArrayCollection();
         $this->wantedBooks = new ArrayCollection();
+        $this->currentBooks = new ArrayCollection();
     }
 
     // -----------------------------------------
@@ -493,6 +499,40 @@ class Book
     public function getWantedBooks()
     {
         return $this->wantedBooks;
+    }
+
+    /**
+     * Add currentBook
+     *
+     * @param \PortalBundle\Entity\CurrentBook $currentBook
+     *
+     * @return Book
+     */
+    public function addCurrentBook(\PortalBundle\Entity\CurrentBook $currentBook)
+    {
+        $this->currentBooks[] = $currentBook;
+
+        return $this;
+    }
+
+    /**
+     * Remove currentBook
+     *
+     * @param \PortalBundle\Entity\CurrentBook $currentBook
+     */
+    public function removeCurrentBook(\PortalBundle\Entity\CurrentBook $currentBook)
+    {
+        $this->currentBooks->removeElement($currentBook);
+    }
+
+    /**
+     * Get CurrentBooks
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCurrentBooks()
+    {
+        return $this->currentBooks;
     }
 
 }

@@ -92,6 +92,11 @@ class Reader extends BaseUser
      * @ORM\OneToMany(targetEntity="WantedBook", mappedBy="reader", cascade={"persist"})
      */
     private $wantedBooks;
+
+    /**
+     * @ORM\OneToMany(targetEntity="CurrentBook", mappedBy="reader", cascade={"persist"})
+     */
+    private $currentBooks;
     
     public function __construct() {
         parent::__construct();
@@ -101,6 +106,7 @@ class Reader extends BaseUser
         $this->ratings = new ArrayCollection();
         $this->favouriteBooks = new ArrayCollection();
         $this->wantedBooks = new ArrayCollection();
+        $this->currentBooks = new ArrayCollection();
     }
 
     // -----------------------------------------
@@ -386,6 +392,40 @@ class Reader extends BaseUser
     public function getWantedBooks()
     {
         return $this->wantedBooks;
+    }
+
+    /**
+     * Add currentBook
+     *
+     * @param \PortalBundle\Entity\CurrentBook $currentBook
+     *
+     * @return Reader
+     */
+    public function addCurrentBook(\PortalBundle\Entity\CurrentBook $currentBook)
+    {
+        $this->currentBooks[] = $currentBook;
+
+        return $this;
+    }
+
+    /**
+     * Remove CurrentBook
+     *
+     * @param \PortalBundle\Entity\CurrentBook $currentBook
+     */
+    public function removeCurrentBook(\PortalBundle\Entity\CurrentBook $currentBook)
+    {
+        $this->currentBooks->removeElement($currentBook);
+    }
+
+    /**
+     * Get CurrentBooks
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCurrentBooks()
+    {
+        return $this->currentBooks;
     }
 
 }

@@ -7,6 +7,7 @@ use PortalBundle\Entity\Rating;
 use PortalBundle\Entity\Review;
 use PortalBundle\Entity\FavouriteBook;
 use PortalBundle\Entity\WantedBook;
+use PortalBundle\Entity\CurrentBook;
 use Symfony\Component\Form\FormError;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -105,6 +106,7 @@ class BookController extends BaseController
         $readForm = $this->createReadForm($book);
         $favouriteForm = $this->createFavouriteForm($book);
         $wantedForm = $this->createWantedForm($book);
+        $currentForm = $this->createCurrentForm($book);
         $reader = $this->getUser();
         $reviewForm = $this->createForm('PortalBundle\Form\ReviewType')->handleRequest($request);
         $ratingForm = $this->createForm('PortalBundle\Form\RatingType')->handleRequest($request);
@@ -126,6 +128,7 @@ class BookController extends BaseController
             'read_form' => $readForm->createView(),
             'favourite_form' => $favouriteForm->createView(),
             'wanted_form' => $wantedForm->createView(),
+            'current_form' => $currentForm->createView(),
         ));
     }
 
@@ -207,7 +210,19 @@ class BookController extends BaseController
                     'reader' => $this->getUser()->getId(), 
                     'book' => $book->getId()
                 ));
-            $this->getDoctrine()->getManager()->remove($wantedBook);    
+            $currentBook = $this
+                ->getDoctrine()
+                ->getManager()
+                ->getRepository('PortalBundle:CurrentBook')->findOneBy(array(
+                    'reader' => $this->getUser()->getId(), 
+                    'book' => $book->getId()
+                )); 
+            if($wantedBook) {
+                $this->getDoctrine()->getManager()->remove($wantedBook);
+            }
+            if($currentBook) {
+                $this->getDoctrine()->getManager()->remove($currentBook);                 
+            }                         
 
             $book->addReader($this->getUser());
             $this->getUser()->addBook($book);
@@ -251,6 +266,18 @@ class BookController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $wantedBook = new WantedBook();
+            $currentBook = $this
+                ->getDoctrine()
+                ->getManager()
+                ->getRepository('PortalBundle:CurrentBook')->findOneBy(array(
+                    'reader' => $this->getUser()->getId(), 
+                    'book' => $book->getId()
+                ));
+
+            if($currentBook) {
+                $this->getDoctrine()->getManager()->remove($currentBook);
+            }
+
             $book->removeReader($this->getUser());
             $this->getUser()->removeBook($book);
             $wantedBook->setBook($book);
@@ -284,6 +311,63 @@ class BookController extends BaseController
             ->setMethod('POST')
             ->getForm();
     }   
+
+    /**
+     * Mark book as current.
+     *
+     * @Route("/{id}/current", name="book_current")
+     * @Method("POST")
+     */
+    public function currentAction(Request $request, Book $book)
+    {
+        $form = $this->createCurrentForm($book);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $currentBook = new CurrentBook();
+            $wantedBook = $this
+                ->getDoctrine()
+                ->getManager()
+                ->getRepository('PortalBundle:WantedBook')->findOneBy(array(
+                    'reader' => $this->getUser()->getId(), 
+                    'book' => $book->getId()
+                ));                
+            if($wantedBook) {
+                $this->getDoctrine()->getManager()->remove($wantedBook);
+            }            
+            $book->removeReader($this->getUser());
+            $this->getUser()->removeBook($book);
+            $currentBook->setBook($book);
+            $currentBook->setReader($this->getUser());            
+
+            $this->getDoctrine()->getManager()->persist($book);
+            $this->getDoctrine()->getManager()->persist($this->getUser());
+            $this->getDoctrine()->getManager()->persist($currentBook);
+            $this->getDoctrine()->getManager()->flush();
+
+            $request->getSession()
+                ->getFlashBag()
+                ->add('success', 'Book added to currently reading!');
+
+        }
+
+        return $this->redirectToRoute('book_show', array('id' => $book->getId()));
+    }    
+
+    /**
+     * Creates a form to mark book as current.
+     *
+     * @param Book $book The book entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createCurrentForm(Book $book)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('book_current', array('id' => $book->getId())))
+            ->setMethod('POST')
+            ->getForm();
+    }
 
     /**
      * Add book to favourites.
