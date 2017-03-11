@@ -4,6 +4,7 @@ namespace PortalBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -13,6 +14,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *
  * @ORM\Table(name="books")
  * @ORM\Entity(repositoryClass="PortalBundle\Repository\BookRepository")
+ * @UniqueEntity("isbn")
  * @Vich\Uploadable
  */
 class Book
@@ -46,7 +48,7 @@ class Book
     /**
      * @var string
      *
-     * @ORM\Column(name="isbn", type="string", length=13, nullable=true)
+     * @ORM\Column(name="isbn", type="string", length=13, unique=true, nullable=true)
      * @Assert\Isbn(
      *     message = "This value should match ISBN format."
      * )        
@@ -70,7 +72,7 @@ class Book
     private $imageName;
 
     /**
-     * @var \DateTime
+     * @var \Date
      *
      * @ORM\Column(name="publishDate", type="date", nullable=true)
      * @Assert\Date()(
@@ -80,7 +82,7 @@ class Book
     private $publishDate;
 
     /**
-     * @var \DateTime
+     * @var \Date
      *
      * @ORM\Column(name="addDate", type="date", nullable=true)
      * @Assert\Date()(
@@ -143,10 +145,17 @@ class Book
      */
     private $currentBooks;
 
+    /**
+    * @ORM\ManyToMany(targetEntity="Genre", mappedBy="books")
+    */
+    private $genres;
+
     public function __construct() {
+        $this->addDate = new \DateTime();
         $this->readers = new ArrayCollection();
         $this->reviews = new ArrayCollection();
         $this->ratings = new ArrayCollection();
+        $this->genres = new ArrayCollection();
         $this->favouriteBooks = new ArrayCollection();
         $this->wantedBooks = new ArrayCollection();
         $this->currentBooks = new ArrayCollection();
@@ -599,6 +608,39 @@ class Book
     public function getCurrentBooks()
     {
         return $this->currentBooks;
+    }
+
+    /**
+     * Add genres
+     *
+     * @param \PortalBundle\Entity\Genre $genres
+     * @return Book
+     */
+    public function addGenre(\PortalBundle\Entity\Genre $genres)
+    {
+        $this->genres[] = $genres;
+
+        return $this;
+    }
+
+    /**
+     * Remove genres
+     *
+     * @param \PortalBundle\Entity\Genre $genres
+     */
+    public function removeGenre(\PortalBundle\Entity\Genre $genres)
+    {
+        $this->genres->removeElement($genres);
+    }
+
+    /**
+     * Get genres
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGenres()
+    {
+        return $this->genres;
     }
 
 }

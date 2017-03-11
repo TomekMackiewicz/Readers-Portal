@@ -83,7 +83,7 @@ class BookController extends BaseController
         $form = $this->createForm('PortalBundle\Form\BookType', $book);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {            
+        if ($form->isSubmitted() && $form->isValid()) {           
             $this->getDoctrine()->getManager()->persist($book);
             $this->getDoctrine()->getManager()->flush($book);
 

@@ -30,35 +30,54 @@ class BookType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
-            ->add('description')
+            ->add('title', TextType::class, array(
+                'required' => true
+            ))
+            ->add('description', TextType::class, array(
+                'required' => false
+            ))   
             ->add('coverImage', FileType::class, array(
                 'label' => 'Cover Image (jpg file)',
                 'required' => false
             ))
-            ->add('imageName')
+            // ->add('imageName', TextType::class, array(
+            //     'required' => false
+            // ))
             ->add('publishDate', DateType::class, array(
-                'label' => 'Publish Year',
+                'label' => 'Publish Date',
                 'widget' => 'single_text',
-                'attr'=> ['class'=>'datepicker'],
-                'required' => true
-            ))
-            ->add('addDate', DateType::class, array(
-                'label' => 'Add Date',
-                'widget' => 'single_text',
-                'attr'=> ['class'=>'datepicker'],
-                'required' => true
+                'attr'=> array('class'=>'datepicker'),
+                'required' => false
             )) 
+            // ->add('addDate', DateType::class, array(
+            //     'widget' => 'single_text',
+            //     'attr'=> array('class'=>'datepicker'),
+            //     'required' => false
+            // ))                      
             ->add('author', TextType::class, array(
-                'attr'=>array('class'=>'formSearchAuthor')
+                'attr' => array('class'=>'formSearchAuthor'),
+                'required' => true
             ))             
             ->add('translator', TextType::class, array(
-                'attr'=>array('class'=>'searchTranslator')
+                'attr' => array('class'=>'searchTranslator'),
+                'required' => false
             ))            
             ->add('publisher', TextType::class, array(
-                'attr'=>array('class'=>'searchPublisher')
+                'attr' => array('class'=>'searchPublisher'),
+                'required' => false
             ))                
-            ->add('isbn');
+            ->add('isbn', TextType::class, array(
+                'required' => false
+            ))
+            ->add('genres', EntityType::class, array(
+                'label' => 'Genres',
+                'class' => 'PortalBundle:Genre',
+                'choice_label' => 'name',
+                'expanded' => true,
+                'multiple' => true,
+                'required' => false,
+                'by_reference' => true,           
+            ));
 
         $builder->get('author')
             ->addModelTransformer(new TextToAuthorTransformer($this->manager)); 
