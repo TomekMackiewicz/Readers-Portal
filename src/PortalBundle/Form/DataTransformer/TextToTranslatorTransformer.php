@@ -28,7 +28,8 @@ class TextToTranslatorTransformer implements DataTransformerInterface
             return '';
         }
 
-        return $translator->getId();
+        //return $translator->getId();
+        return $translator->getName();
     }
 
     /**

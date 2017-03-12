@@ -28,7 +28,8 @@ class TextToAuthorTransformer implements DataTransformerInterface
             return '';
         }
 
-        return $author->getId();
+        //return $author->getId();
+        return $author->getName();
     }
 
     /**

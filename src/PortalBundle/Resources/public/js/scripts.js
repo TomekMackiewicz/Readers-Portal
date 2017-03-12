@@ -1,4 +1,5 @@
-$( document ).ready(function() {
+
+$(document).ready(function() {
 	
 	$(function() {
 	  	$(".datepicker").datepicker({ dateFormat: 'yy-mm-dd' });
@@ -38,6 +39,5 @@ $( document ).ready(function() {
 			readonly: true
 		});
 	});
-
 
 });

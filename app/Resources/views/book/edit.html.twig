@@ -5,6 +5,24 @@
 
     {{ form_start(edit_form) }}
         {{ form_widget(edit_form) }}
+        <p>
+				{% for tag in book.getTags %}
+				   {% if tag %}
+
+				       <span>
+				       {{ tag.name }}
+
+				       {% for tr in tag.getTagRelation %}
+
+				           <a href="{{ path('mykees_delete_relation',{'relation_id':tr.id}) }}" class="delTag">[x]
+				           </a>
+
+				       {% endfor %}
+
+				       </span>
+				   {% endif %}
+				{% endfor %}  
+				</p>
         <input type="submit" value="Edit" class="btn btn-default" />
     {{ form_end(edit_form) }}
 
@@ -14,4 +32,9 @@
         <input type="submit" value="Delete" class="btn btn-danger">
     {{ form_end(delete_form) }}
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ mk_tag_javascript() }}
 {% endblock %}

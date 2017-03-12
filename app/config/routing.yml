@@ -8,3 +8,7 @@ fos_user:
 
 _liip_imagine:
     resource: "@LiipImagineBundle/Resources/config/routing.xml"
+
+mykees_tag_admin:
+    resource: "@MykeesTagBundle/Resources/config/routing_admin.yml"
+    prefix:   /admin/tag    

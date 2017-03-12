@@ -35,9 +35,8 @@ class Genre
     // -----------------------------------------
 
     /**
-    * @ORM\ManyToMany(targetEntity="Book", inversedBy="genres")
-    * @ORM\JoinTable(name="genres_books")
-    */
+     * @ORM\ManyToMany(targetEntity="Book", mappedBy="genres")
+     */
     private $books;
 
     public function __construct() {

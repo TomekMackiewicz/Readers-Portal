@@ -80,8 +80,18 @@
             {% if book.translator %}<small>Translator: {{ book.translator.name }}</small><br>{% endif %}    
             {% if book.publisher %}<small>Publisher: {{ book.publisher.name }}</small>{% endif %}<br>
             <small>ISBN: {{ book.isbn }}</small><br>
-            <small>Genres:</small><br>
-            <small>Tags:</small>
+            <small>Genre(s):
+                {% for genre in book.genres %}
+                    {{genre.name}}
+                {% endfor %}
+            </small><br>
+            <small>Tag(s):
+                {% if book.getTags() %}
+                    {% for tag in book.getTags %}
+                        {{ tag.name }}
+                    {% endfor %}
+                {% endif %}
+            </small>
             <hr>
             <div class="clearfix"></div>
 

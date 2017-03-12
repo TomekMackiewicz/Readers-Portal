@@ -81,11 +81,11 @@ class BookController extends BaseController
     {
         $book = new Book();
         $form = $this->createForm('PortalBundle\Form\BookType', $book);
-        $form->handleRequest($request);
+        $form->handleRequest($request);     
 
-        if ($form->isSubmitted() && $form->isValid()) {           
+        if ($form->isSubmitted() && $form->isValid()) {        
             $this->getDoctrine()->getManager()->persist($book);
-            $this->getDoctrine()->getManager()->flush($book);
+            $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('book_show', array('id' => $book->getId()));
         }
@@ -104,6 +104,8 @@ class BookController extends BaseController
      */
     public function showAction(Request $request, Book $book)
     {
+        $this->get('mk.tag_manager')->findTagRelation($book);
+
         $deleteForm = $this->createDeleteForm($book);
         $readForm = $this->createReadForm($book);
         $favouriteForm = $this->createFavouriteForm($book);
@@ -142,6 +144,7 @@ class BookController extends BaseController
      */
     public function editAction(Request $request, Book $book)
     {
+        $this->get('mk.tag_manager')->findTagRelation($book);
         $deleteForm = $this->createDeleteForm($book);
         $editForm = $this->createForm('PortalBundle\Form\BookType', $book);
         $editForm->handleRequest($request);

@@ -5,6 +5,7 @@ namespace PortalBundle\Form;
 use PortalBundle\Form\DataTransformer\TextToAuthorTransformer;
 use PortalBundle\Form\DataTransformer\TextToPublisherTransformer;
 use PortalBundle\Form\DataTransformer\TextToTranslatorTransformer;
+use PortalBundle\Form\DataTransformer\TextToTagsTransformer;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,6 +14,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class BookType extends AbstractType
 {
@@ -67,6 +69,7 @@ class BookType extends AbstractType
                 'required' => false
             ))                
             ->add('isbn', TextType::class, array(
+                'label' => 'ISBN',                
                 'required' => false
             ))
             ->add('genres', EntityType::class, array(
@@ -77,14 +80,18 @@ class BookType extends AbstractType
                 'multiple' => true,
                 'required' => false,
                 'by_reference' => true,           
-            ));
+            ))
+            ->add('tags','mk_tag', array(
+                'label'=>'Tags',
+                'required' => false,
+            ));                    
 
         $builder->get('author')
             ->addModelTransformer(new TextToAuthorTransformer($this->manager)); 
         $builder->get('publisher')
             ->addModelTransformer(new TextToPublisherTransformer($this->manager)); 
         $builder->get('translator')
-            ->addModelTransformer(new TextToTranslatorTransformer($this->manager));               
+            ->addModelTransformer(new TextToTranslatorTransformer($this->manager));                            
     }
     
     /**

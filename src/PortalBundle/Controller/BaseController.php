@@ -14,6 +14,16 @@ use Symfony\Component\HttpFoundation\Request;
 class BaseController extends Controller
 {
 
+  // public function findTagRelation( $model )
+  // {
+  //     if(is_array($model))
+  //     {
+  //         $this->findTagRelationArray($model);
+  //     }else{
+  //         $this->findTagRelation($model);
+  //     }
+  // }
+
   public function recentAction()
   {
       $books = $this

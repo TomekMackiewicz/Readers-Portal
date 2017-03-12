@@ -28,7 +28,8 @@ class TextToPublisherTransformer implements DataTransformerInterface
             return '';
         }
 
-        return $publisher->getId();
+        //return $publisher->getId();
+        return $publisher->getName();
     }
 
     /**

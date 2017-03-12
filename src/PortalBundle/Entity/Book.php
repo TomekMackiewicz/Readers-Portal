@@ -8,17 +8,23 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Mykees\TagBundle\Interfaces\Taggable;
+use Mykees\TagBundle\Traits\TaggableTrait;
 
 /**
  * Book
  *
  * @ORM\Table(name="books")
  * @ORM\Entity(repositoryClass="PortalBundle\Repository\BookRepository")
+ * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity("isbn")
  * @Vich\Uploadable
  */
-class Book
+class Book implements Taggable
 {
+
+    use TaggableTrait;
+
     /**
      * @var int
      *
@@ -131,23 +137,24 @@ class Book
     private $ratings;
 
     /**
-     * @ORM\OneToMany(targetEntity="FavouriteBook", mappedBy="book", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="FavouriteBook", mappedBy="book", cascade={"remove"})
      */
     private $favouriteBooks;
 
     /**
-     * @ORM\OneToMany(targetEntity="WantedBook", mappedBy="book", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="WantedBook", mappedBy="book", cascade={"remove"})
      */
     private $wantedBooks;
  
     /**
-     * @ORM\OneToMany(targetEntity="CurrentBook", mappedBy="book", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="CurrentBook", mappedBy="book", cascade={"remove"})
      */
     private $currentBooks;
 
     /**
-    * @ORM\ManyToMany(targetEntity="Genre", mappedBy="books")
-    */
+     * @ORM\ManyToMany(targetEntity="Genre", inversedBy="books")
+     * @ORM\JoinTable(name="genres_books")
+     */
     private $genres;
 
     public function __construct() {
