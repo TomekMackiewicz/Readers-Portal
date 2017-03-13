@@ -31,7 +31,8 @@ class RatingType extends AbstractType
                 'label' => false,
                 'expanded' => false,
                 'multiple' => false,
-                'choices_as_values' => true
+                'choices_as_values' => true,
+                //'data' => null,                
             ));
 
     }

@@ -5,7 +5,7 @@ namespace PortalBundle\Form;
 use PortalBundle\Form\DataTransformer\TextToAuthorTransformer;
 use PortalBundle\Form\DataTransformer\TextToPublisherTransformer;
 use PortalBundle\Form\DataTransformer\TextToTranslatorTransformer;
-use PortalBundle\Form\DataTransformer\TextToTagsTransformer;
+//use PortalBundle\Form\DataTransformer\TextToTagsTransformer;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,6 +14,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class BookType extends AbstractType
@@ -35,7 +36,7 @@ class BookType extends AbstractType
             ->add('title', TextType::class, array(
                 'required' => true
             ))
-            ->add('description', TextType::class, array(
+            ->add('description', TextareaType::class, array(
                 'required' => false
             ))   
             ->add('coverImage', FileType::class, array(
@@ -48,7 +49,8 @@ class BookType extends AbstractType
             ->add('publishDate', DateType::class, array(
                 'label' => 'Publish Date',
                 'widget' => 'single_text',
-                'attr'=> array('class'=>'datepicker'),
+                'format' => 'yyyy',
+                //'attr'=> array('class'=>'datepicker'),
                 'required' => false
             )) 
             // ->add('addDate', DateType::class, array(
@@ -76,6 +78,7 @@ class BookType extends AbstractType
                 'label' => 'Genres',
                 'class' => 'PortalBundle:Genre',
                 'choice_label' => 'name',
+                'label_attr' => array('class' => 'checkbox-inline'),               
                 'expanded' => true,
                 'multiple' => true,
                 'required' => false,

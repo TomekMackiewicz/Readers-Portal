@@ -14,16 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 class BaseController extends Controller
 {
 
-  // public function findTagRelation( $model )
-  // {
-  //     if(is_array($model))
-  //     {
-  //         $this->findTagRelationArray($model);
-  //     }else{
-  //         $this->findTagRelation($model);
-  //     }
-  // }
-
   public function recentAction()
   {
       $books = $this
@@ -33,6 +23,18 @@ class BaseController extends Controller
 
       return $this->render('book/recent.html.twig', array(
           'books' => $books,
+      )); 
+  }
+
+  public function genresAction()
+  {
+      $genres = $this
+          ->getDoctrine()
+          ->getManager()
+          ->getRepository('PortalBundle:Genre')->findAll();
+
+      return $this->render('genre/all.html.twig', array(
+          'genres' => $genres,
       ));
   }
 

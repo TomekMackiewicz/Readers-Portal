@@ -1,19 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% if vich_uploader_asset(author, 'image') is not null %}
-        <img src="{{ vich_uploader_asset(author, 'image') | imagine_filter('thumb') }}" alt="{{ author.name }}" class="img-thumbnail img-show pull-left" />
-    {% endif %}
-    <h3>{{ author.name }}</h3>
-    <p>{{ author.description }}</p>
-
-    <hr>
-    <div class="clearfix"></div>
-
-    <h4>Books</h4>
-
+    <h2>New {{ genre.name }} books</h2>
     <div class="row">
-        {% for book in author.books %}
+        {% for book in genre.books %}
         {% if loop.index is divisible by(7) %}
             </div>
             <div class="row">
@@ -24,19 +14,16 @@
                     <img src="{{ vich_uploader_asset(book, 'coverImage') | imagine_filter('s_thumb') }}" alt="{{ book.title }}" class="img-thumbnail" /><br>
                   {% endif %}  
                 <small><b><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.title }}</a></b></small><br>
+                <small><a href="{{ path('author_show', { 'id': book.author.id }) }}">{{ book.author.name }}</a></small>
                 </div>
             </div>
         {% endfor %}
     </div>
 
-    <hr>
-
-    <a href="{{ path('author_index') }}" class="btn btn-default">Back to the list</a>
-
-    <a href="{{ path('author_edit', { 'id': author.id }) }}" class="btn btn-default">Edit</a>
+{#     <a href="{{ path('author_edit', { 'id': author.id }) }}" class="btn btn-default">Edit</a>
 
     {{ form_start(delete_form) }}
         <input type="submit" value="Delete" class="btn btn-danger">
-    {{ form_end(delete_form) }}
+    {{ form_end(delete_form) }} #}
 
 {% endblock %}

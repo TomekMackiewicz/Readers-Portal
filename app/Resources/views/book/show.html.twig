@@ -72,11 +72,14 @@
                 <a id="ratingDetails" data-toggle="modal" data-target="#myModal">
                     <i class="fa fa-bar-chart" aria-hidden="true"></i> Rating details
                 </a>
+            {% else %}
+                <span id="avgRate">0</span> ratings, 0 reviews.               
             {% endif %}
             <hr> 
             <p>{{ book.description }}</p>
             <hr>
-            {% if book.publishDate %}<small>Publish Date: {{ book.publishDate|date('Y-m-d') }}</small><br>{% endif %}
+            {% if book.publishDate %}<small>Published: {{ book.publishDate|date('Y') }}</small><br>{% endif %}
+            <small>Added: {{ book.addDate|date('Y-m-d') }}</small><br>   
             {% if book.translator %}<small>Translator: {{ book.translator.name }}</small><br>{% endif %}    
             {% if book.publisher %}<small>Publisher: {{ book.publisher.name }}</small>{% endif %}<br>
             <small>ISBN: {{ book.isbn }}</small><br>
@@ -96,31 +99,35 @@
             <div class="clearfix"></div>
 
             <h4>Reviews</h4>
-            <p>Filter, sort</p>
-            <div class="panel panel-default">
-                {% for review in book.reviews %}
-                    <div class="panel-heading">
-                        <strong>{{review.reader}}</strong>, 
-                        {{review.publishDate|date('Y-m-d')}} 
-                        {% if review.rate %}
-                            <span class="hidden">{{review.rate}}</span>
-                            <select class="showReaderRating">
-                              <option value="1">1</option>
-                              <option value="2">2</option>
-                              <option value="3">3</option>
-                              <option value="4">4</option>
-                              <option value="5">5</option>
-                              <option value="6">6</option>
-                              <option value="7">7</option>
-                              <option value="8">8</option>
-                              <option value="9">9</option>
-                              <option value="10">10</option>  
-                            </select>                            
-                        {% endif %}
-                    </div>        
-                    <div class="panel-body">{{review.contents}}</div>   
-                {% endfor %}
-            </div>
+            {% if book.reviews|length > 0 %}
+                <p>Filter, sort</p>
+                <div class="panel panel-default">
+                    {% for review in book.reviews %}
+                        <div class="panel-heading">
+                            <strong>{{review.reader}}</strong>, 
+                            {{review.publishDate|date('Y-m-d')}} 
+                            {% if review.rate %}
+                                <span class="hidden">{{review.rate}}</span>
+                                <select class="showReaderRating">
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                  <option value="3">3</option>
+                                  <option value="4">4</option>
+                                  <option value="5">5</option>
+                                  <option value="6">6</option>
+                                  <option value="7">7</option>
+                                  <option value="8">8</option>
+                                  <option value="9">9</option>
+                                  <option value="10">10</option>  
+                                </select>                            
+                            {% endif %}
+                        </div>        
+                        <div class="panel-body">{{review.contents}}</div>   
+                    {% endfor %}
+                </div>
+            {% else %}
+                No reviews yet.
+            {% endif %}
         </div>
        
         <div class="col-md-4">
@@ -194,11 +201,17 @@
             {{ form_end(current_form) }}           
 
             <hr>
+            <h4>About {{ book.author.name }}</h4>
+    {% if vich_uploader_asset(book.author, 'image') is not null %}
+        <img src="{{ vich_uploader_asset(book.author, 'image') | imagine_filter('s_thumb') }}" alt="{{ book.author.name }}" class="img-thumbnail pull-left" />
+    {% endif %}
+    <p>{{ book.author.description }}</p>            
+            <hr>            
             <h4>On Shelves</h4>
             <p>Want to read: {{book.wantedBooks|length}}</p>
             <p>Currently reading: {{book.currentBooks|length}}</p>            
             <p>Read: {{book.readers|length}}</p>
-
+            <p>Favourites: {{book.favouriteBooks|length}}</p>
             <hr>
             <h4>Quotes</h4>            
         </div>

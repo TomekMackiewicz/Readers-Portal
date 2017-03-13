@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 /**
  * Book controller.
  *
- * @Route("book")
+ * @Route("books")
  */
 class BookController extends BaseController
 {
@@ -104,8 +104,6 @@ class BookController extends BaseController
      */
     public function showAction(Request $request, Book $book)
     {
-        $this->get('mk.tag_manager')->findTagRelation($book);
-
         $deleteForm = $this->createDeleteForm($book);
         $readForm = $this->createReadForm($book);
         $favouriteForm = $this->createFavouriteForm($book);
@@ -123,7 +121,9 @@ class BookController extends BaseController
 
         $this->setReview($request, $reviewForm, $checkReadersUniqueReview, $checkReadersUniqueRating, $book);
         $this->setRating($request, $ratingForm, $checkReadersUniqueRating, $book);
-
+        
+        $this->get('mk.tag_manager')->findTagRelation($book);
+        
         return $this->render('book/show.html.twig', array(
             'book' => $book,
             'delete_form' => $deleteForm->createView(),

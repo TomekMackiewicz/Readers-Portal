@@ -54,7 +54,7 @@ class Book implements Taggable
     /**
      * @var string
      *
-     * @ORM\Column(name="isbn", type="string", length=13, unique=true, nullable=true)
+     * @ORM\Column(name="isbn", type="string", length=32, unique=true, nullable=true)
      * @Assert\Isbn(
      *     message = "This value should match ISBN format."
      * )        
@@ -65,6 +65,11 @@ class Book implements Taggable
      * @var string
      * 
      * @Vich\UploadableField(mapping="book_image", fileNameProperty="imageName")
+     * @Assert\File(
+     *     maxSize = "1024k",
+     *     mimeTypes = {"image/jpeg", "image/png"},
+     *     mimeTypesMessage = "Please upload a valid image type (jpg)"
+     * )     
      * 
      * @var File      
      */
@@ -96,6 +101,13 @@ class Book implements Taggable
      * )          
      */     
     private $addDate;
+
+    /**
+     * @var \Date
+     *
+     * @ORM\Column(name="updatedAt", type="date", nullable=true)         
+     */     
+    private $updatedAt;
 
     // -----------------------------------------
     //
@@ -475,10 +487,13 @@ class Book implements Taggable
     {
         $this->coverImage = $image;
 
+        // if ($image) {
+        //     $this->publishDate = new \DateTimeImmutable();
+        // }
         if ($image) {
-            $this->publishDate = new \DateTimeImmutable();
+            $this->updatedAt = new \DateTimeImmutable();;
         }
-
+        
         return $this;
     }
 

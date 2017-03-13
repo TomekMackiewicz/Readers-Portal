@@ -10,7 +10,7 @@
         </div>     
         <h2><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.title }}</a></h2>
         <h3><a href="{{ path('author_show', { 'id': book.author.id }) }}">{{ book.author.name }}</a></h3>
-        {% if book.publishDate %}<p>Publish Date: {{ book.publishDate|date('Y-m-d') }}</p>{% endif %}
+        {% if book.publishDate %}<p>Publish Date: {{ book.publishDate|date('Y') }}</p>{% endif %}
         {% if book.translator %}<p>Translator: {{ book.translator.name }}</p>{% endif %}    
         {% if book.publisher %}<p>Publisher: {{ book.publisher.name }}</p>{% endif %}
         <p>{{ book.description }}</p>

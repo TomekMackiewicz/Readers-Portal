@@ -8,17 +8,12 @@
         <p>
 				{% for tag in book.getTags %}
 				   {% if tag %}
-
 				       <span>
 				       {{ tag.name }}
-
 				       {% for tr in tag.getTagRelation %}
-
 				           <a href="{{ path('mykees_delete_relation',{'relation_id':tr.id}) }}" class="delTag">[x]
 				           </a>
-
 				       {% endfor %}
-
 				       </span>
 				   {% endif %}
 				{% endfor %}  
