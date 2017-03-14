@@ -33,17 +33,30 @@ class BookController extends BaseController
      */
     public function indexAction()
     {
-        // $books = $this
-        //     ->getDoctrine()
-        //     ->getManager()
-        //     ->getRepository('PortalBundle:Book')->findBy(array(), array('publishDate' => 'DESC'));
-
         $books = $this
             ->getDoctrine()
             ->getManager()
             ->getRepository('PortalBundle:Book')->showRecentBooks(); 
 
         return $this->render('book/index.html.twig', array(
+            'books' => $books,
+        ));
+    }
+
+    /**
+     * Lists top rated book.
+     *
+     * @Route("/top", name="book_top")
+     * @Method("GET")
+     */
+    public function topAction()
+    {
+        $books = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('PortalBundle:Book')->showTopRatedBooks(); 
+
+        return $this->render('book/top.html.twig', array(
             'books' => $books,
         ));
     }
@@ -114,15 +127,15 @@ class BookController extends BaseController
         $favouriteForm = $this->createFavouriteForm($book);
         $wantedForm = $this->createWantedForm($book);
         $currentForm = $this->createCurrentForm($book);
-        $reader = $this->getUser();
+
         $reviewForm = $this->createForm('PortalBundle\Form\ReviewType')->handleRequest($request);
         $ratingForm = $this->createForm('PortalBundle\Form\RatingType')->handleRequest($request);
 
         $checkReadersUniqueRating = $this->getRatingRepo()
-            ->checkReadersUniqueRating($reader->getId(),$book->getId());
+            ->checkReadersUniqueRating($this->getUser()->getId(), $book->getId());
 
         $checkReadersUniqueReview = $this->getReviewRepo()
-            ->checkReadersUniqueReview($reader->getId(),$book->getId());
+            ->checkReadersUniqueReview($this->getUser()->getId(), $book->getId());
 
         $this->setReview($request, $reviewForm, $checkReadersUniqueReview, $checkReadersUniqueRating, $book);
         $this->setRating($request, $ratingForm, $checkReadersUniqueRating, $book);
