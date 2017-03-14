@@ -45,6 +45,8 @@
         <div class="col-md-8">
             {% if vich_uploader_asset(book, 'coverImage') is not null %}
                 <img src="{{ vich_uploader_asset(book, 'coverImage') | imagine_filter('thumb') }}" alt="{{ book.title }}" class="img-thumbnail img-show pull-left" />
+            {% else %}
+                <img src="http://placehold.it/220x313?text=No image" class="img-thumbnail img-show pull-left">
             {% endif %}
             <h3>{{ book.title }}</h3>
             <h4>by <a href="{{ path('author_show', { 'id': book.author.id }) }}">{{ book.author.name }}</a></h4>

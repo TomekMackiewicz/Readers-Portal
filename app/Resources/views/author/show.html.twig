@@ -3,10 +3,11 @@
 {% block body %}
     {% if vich_uploader_asset(author, 'image') is not null %}
         <img src="{{ vich_uploader_asset(author, 'image') | imagine_filter('thumb') }}" alt="{{ author.name }}" class="img-thumbnail img-show pull-left" />
+    {% else %}
+        <img src="http://placehold.it/220x313?text=No image" class="img-thumbnail img-show pull-left">        
     {% endif %}
     <h3>{{ author.name }}</h3>
     <p>{{ author.description }}</p>
-
     <hr>
     <div class="clearfix"></div>
 
@@ -20,9 +21,11 @@
         {% endif %}
             <div class="col-md-2">
                 <div class="pull-left">
-                  {% if vich_uploader_asset(book, 'coverImage') is not null %}
-                    <img src="{{ vich_uploader_asset(book, 'coverImage') | imagine_filter('s_thumb') }}" alt="{{ book.title }}" class="img-thumbnail" /><br>
-                  {% endif %}  
+                    {% if vich_uploader_asset(book, 'coverImage') is not null %}
+                        <img src="{{ vich_uploader_asset(book, 'coverImage') | imagine_filter('s_thumb') }}" alt="{{ book.title }}" class="img-thumbnail" /><br>
+                    {% else %}
+                        <img src="http://placehold.it/110x157?text=No image" class="img-thumbnail pull-left">
+                    {% endif %}  
                 <small><b><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.title }}</a></b></small><br>
                 </div>
             </div>

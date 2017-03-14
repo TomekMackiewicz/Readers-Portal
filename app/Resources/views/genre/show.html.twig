@@ -13,6 +13,9 @@
                 {% if vich_uploader_asset(book, 'coverImage', 'PortalBundle\\Entity\\Book') is not null %}
                     <img src="{{ vich_uploader_asset(book, 'coverImage', 'PortalBundle\\Entity\\Book') | imagine_filter('s_thumb') }}" alt="{{ book.title }}" class="img-thumbnail" />
                     <br>
+                {% else %}
+                    <img src="http://placehold.it/110x157?text=No image" class="img-thumbnail pull-left">
+                    <br>
                 {% endif %} 
                 <small><b><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.title }}</a></b></small>
                 <br>
@@ -32,6 +35,9 @@
                 {% if vich_uploader_asset(book, 'coverImage', 'PortalBundle\\Entity\\Book') is not null %}
                     <img src="{{ vich_uploader_asset(book, 'coverImage', 'PortalBundle\\Entity\\Book') | imagine_filter('s_thumb') }}" alt="{{ book.title }}" class="img-thumbnail" />
                     <br>
+                {% else %}
+                    <img src="http://placehold.it/110x157?text=No image" class="img-thumbnail pull-left">
+                    <br>                    
                 {% endif %} 
                 <small><b><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.title }}</a></b></small>
                 <br>
@@ -51,6 +57,9 @@
                 {% if vich_uploader_asset(book, 'coverImage', 'PortalBundle\\Entity\\Book') is not null %}
                     <img src="{{ vich_uploader_asset(book, 'coverImage', 'PortalBundle\\Entity\\Book') | imagine_filter('s_thumb') }}" alt="{{ book.title }}" class="img-thumbnail" />
                     <br>
+                {% else %}
+                    <img src="http://placehold.it/110x157?text=No image" class="img-thumbnail pull-left">
+                    <br>                    
                 {% endif %} 
                 <small><b><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.title }}</a></b></small>
                 <br>
