@@ -54,4 +54,27 @@ class GenreRepository extends \Doctrine\ORM\EntityRepository
 		return $books;
 	}	
 
+	public function showPopularBooks($genreId) {
+		$books = $this->getEntityManager()->createQuery(
+			"SELECT 
+					g.name,
+					b.id AS id, 
+					b.title AS title,  
+					b.addDate AS addDate, 
+					b.imageName AS imageName,
+					COUNT(distinct r.id) AS reviewsCount,
+					a.id AS authorId,					
+					a.name AS authorName					
+			 FROM PortalBundle:Genre g 
+			 JOIN g.books b
+			 JOIN b.author a
+			 JOIN b.reviews r
+			 WHERE g.id = $genreId
+			 GROUP BY b.id			 
+			 ORDER BY reviewsCount DESC"
+		)->setMaxResults(6)->getResult();
+
+		return $books;
+	}	
+
 }

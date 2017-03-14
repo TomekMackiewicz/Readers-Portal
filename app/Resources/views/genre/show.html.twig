@@ -8,16 +8,15 @@
             </div>
             <div class="row">
         {% endif %}
-            <div class="col-md-2">               
+            <div class="col-md-2"> 
+                <p>{{ book.addDate | date('Y-m-d') }}</p>               
                 {% if vich_uploader_asset(book, 'coverImage', 'PortalBundle\\Entity\\Book') is not null %}
                     <img src="{{ vich_uploader_asset(book, 'coverImage', 'PortalBundle\\Entity\\Book') | imagine_filter('s_thumb') }}" alt="{{ book.title }}" class="img-thumbnail" />
                     <br>
                 {% endif %} 
                 <small><b><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.title }}</a></b></small>
                 <br>
-                <small><a href="{{ path('author_show', { 'id': book.authorId }) }}">{{ book.authorName }}</a></small>
-                <br>
-                <small>{{ book.addDate | date('Y-m-d') }}</small>   
+                <small><a href="{{ path('author_show', { 'id': book.authorId }) }}">{{ book.authorName }}</a></small>  
             </div>
         {% endfor %}
     </div>
@@ -29,7 +28,7 @@
             <div class="row">
         {% endif %}
             <div class="col-md-2">
-                <p><span class="badge">{{ book.rating | round(2) }}</span></p>            
+                <p>Rating: <span class="badge">{{ book.rating | round(2) }}</span></p>            
                 {% if vich_uploader_asset(book, 'coverImage', 'PortalBundle\\Entity\\Book') is not null %}
                     <img src="{{ vich_uploader_asset(book, 'coverImage', 'PortalBundle\\Entity\\Book') | imagine_filter('s_thumb') }}" alt="{{ book.title }}" class="img-thumbnail" />
                     <br>
@@ -41,6 +40,24 @@
         {% endfor %}
     </div>    
     <h2>Most popular {{ genre.name }} books</h2>
+    <div class="row">
+        {% for book in popularBooks %}
+        {% if loop.index is divisible by(7) %}
+            </div>
+            <div class="row">
+        {% endif %}
+            <div class="col-md-2">
+                <p>Reviews: <span class="badge">{{ book.reviewsCount }}</span></p>            
+                {% if vich_uploader_asset(book, 'coverImage', 'PortalBundle\\Entity\\Book') is not null %}
+                    <img src="{{ vich_uploader_asset(book, 'coverImage', 'PortalBundle\\Entity\\Book') | imagine_filter('s_thumb') }}" alt="{{ book.title }}" class="img-thumbnail" />
+                    <br>
+                {% endif %} 
+                <small><b><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.title }}</a></b></small>
+                <br>
+                <small><a href="{{ path('author_show', { 'id': book.authorId }) }}">{{ book.authorName }}</a></small>                 
+            </div>
+        {% endfor %}
+    </div> 
 
 {#     <a href="{{ path('author_edit', { 'id': author.id }) }}" class="btn btn-default">Edit</a>
 

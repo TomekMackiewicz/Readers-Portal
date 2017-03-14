@@ -74,10 +74,17 @@ class GenreController extends Controller
             ->getRepository('PortalBundle:Genre')
             ->showTopRatedBooks($genre->getId());
 
+        $popularBooks = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('PortalBundle:Genre')
+            ->showPopularBooks($genre->getId());
+
         return $this->render('genre/show.html.twig', array(
             'genre' => $genre,
             'recentBooks' => $recentBooks,
-            'topBooks' => $topBooks
+            'topBooks' => $topBooks,
+            'popularBooks' => $popularBooks
             //'delete_form' => $deleteForm->createView(),
         ));
     }
