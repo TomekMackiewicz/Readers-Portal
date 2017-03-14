@@ -62,9 +62,22 @@ class GenreController extends Controller
     public function showAction(Genre $genre)
     {
         //$deleteForm = $this->createDeleteForm($genre);
+        $recentBooks = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('PortalBundle:Genre')
+            ->showRecentBooks($genre->getId()); 
+
+        $topBooks = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('PortalBundle:Genre')
+            ->showTopRatedBooks($genre->getId());
 
         return $this->render('genre/show.html.twig', array(
             'genre' => $genre,
+            'recentBooks' => $recentBooks,
+            'topBooks' => $topBooks
             //'delete_form' => $deleteForm->createView(),
         ));
     }

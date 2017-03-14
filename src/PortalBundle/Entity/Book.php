@@ -93,9 +93,9 @@ class Book implements Taggable
     private $publishDate;
 
     /**
-     * @var \Date
+     * @var \DateTime
      *
-     * @ORM\Column(name="addDate", type="date", nullable=true)
+     * @ORM\Column(name="addDate", type="datetime", nullable=true)
      * @Assert\Date()(
      *  message = "Invalid value (expected: date format)."
      * )          
@@ -103,9 +103,9 @@ class Book implements Taggable
     private $addDate;
 
     /**
-     * @var \Date
+     * @var \DateTime
      *
-     * @ORM\Column(name="updatedAt", type="date", nullable=true)         
+     * @ORM\Column(name="updatedAt", type="datetime", nullable=true)         
      */     
     private $updatedAt;
 

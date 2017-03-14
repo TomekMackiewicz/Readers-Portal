@@ -52,12 +52,7 @@ class BookType extends AbstractType
                 'format' => 'yyyy',
                 //'attr'=> array('class'=>'datepicker'),
                 'required' => false
-            )) 
-            // ->add('addDate', DateType::class, array(
-            //     'widget' => 'single_text',
-            //     'attr'=> array('class'=>'datepicker'),
-            //     'required' => false
-            // ))                      
+            ))                      
             ->add('author', TextType::class, array(
                 'attr' => array('class'=>'formSearchAuthor'),
                 'required' => true

@@ -62,6 +62,24 @@ class BookController extends BaseController
     }
 
     /**
+     * Lists most popular book.
+     *
+     * @Route("/popular", name="book_popular")
+     * @Method("GET")
+     */
+    public function popularAction()
+    {
+        $books = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('PortalBundle:Book')->showPopularBooks(); 
+
+        return $this->render('book/popular.html.twig', array(
+            'books' => $books,
+        ));
+    }
+
+    /**
      * @Route("/search", name="book_search")
      * @Method("GET")
      */

@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1>Most popular books</h1>
+
+    {% for book in books %}
+
+        <div class="pull-left">
+          {% if vich_uploader_asset(book, 'coverImage', 'PortalBundle\\Entity\\Book') is not null %}
+            <img src="{{ vich_uploader_asset(book, 'coverImage', 'PortalBundle\\Entity\\Book') | imagine_filter('s_thumb') }}" alt="{{ book.title }}" class="img-thumbnail" />
+          {% endif %}
+        </div>     
+        <h2><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.title }}</a></h2>
+        <h3><a href="{{ path('author_show', { 'id': book.authorId }) }}">{{ book.authorName }}</a></h3>
+        {% if book.publishDate %}<p>Publish Date: {{ book.publishDate|date('Y') }}</p>{% endif %}
+        {% if book.translatorName %}<p>Translator: {{ book.translatorName }}</p>{% endif %}    
+        {% if book.publisherName %}<p>Publisher: {{ book.publisherName }}</p>{% endif %}
+        <p>{{ book.description }}</p>
+        <select class="showRating">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>  
+        </select>
+        
+        <span>{{ book.avgRating|round(2) }}</span>
+         ({{ book.ratingsCount }} votes, {{ book.reviewsCount }} reviews)
+        
+        <div class="clearfix"></div>
+        <hr>            
+    {% endfor %}
+
+{% endblock %}

@@ -10,4 +10,48 @@ namespace PortalBundle\Repository;
  */
 class GenreRepository extends \Doctrine\ORM\EntityRepository
 {
+
+	public function showRecentBooks($genreId) {
+		$books = $this->getEntityManager()->createQuery(
+			"SELECT 
+					g.name,
+					b.id AS id, 
+					b.title AS title,
+					a.id AS authorId,					
+					a.name AS authorName,  
+					b.addDate AS addDate, 
+					b.imageName AS imageName
+			 FROM PortalBundle:Genre g 
+			 JOIN g.books b
+			 JOIN b.author a
+			 WHERE g.id = $genreId			 
+			 ORDER BY b.addDate DESC"
+		)->setMaxResults(12)->getResult();
+
+		return $books;
+	}	
+
+	public function showTopRatedBooks($genreId) {
+		$books = $this->getEntityManager()->createQuery(
+			"SELECT 
+					g.name,
+					b.id AS id, 
+					b.title AS title,  
+					b.addDate AS addDate, 
+					b.imageName AS imageName,
+					AVG(r.rate) AS rating,
+					a.id AS authorId,					
+					a.name AS authorName					
+			 FROM PortalBundle:Genre g 
+			 JOIN g.books b
+			 JOIN b.author a
+			 JOIN b.ratings r
+			 WHERE g.id = $genreId
+			 GROUP BY b.id			 
+			 ORDER BY rating DESC"
+		)->setMaxResults(6)->getResult();
+
+		return $books;
+	}	
+
 }
