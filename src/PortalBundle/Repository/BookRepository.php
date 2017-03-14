@@ -3,6 +3,7 @@
 namespace PortalBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+//use Doctrine\ORM\Query;
 
 /**
  * BookRepository
@@ -12,4 +13,35 @@ use Doctrine\ORM\EntityRepository;
  */
 class BookRepository extends EntityRepository
 {
+
+	public function showRecentBooks() {
+		$books = $this->getEntityManager()->createQuery(
+			"SELECT 
+					b.id, 
+					b.title, 
+					b.addDate, 
+					b.publishDate, 
+					b.description,
+					b.imageName,
+					a.name AS authorName,
+					a.id AS authorId, 
+					t.name AS translatorName, 
+					p.name AS publisherName,
+					AVG(rat.rate) AS avgRating,
+					COUNT(distinct rat.id) AS ratingsCount,
+					COUNT(distinct rev.id) AS reviewsCount
+			 FROM PortalBundle:Book b 
+			 JOIN b.author a
+			 LEFT JOIN b.translator t
+			 LEFT JOIN b.publisher p
+			 LEFT JOIN b.ratings rat
+			 LEFT JOIN b.reviews rev
+			 GROUP BY b.id
+			 ORDER BY b.addDate DESC"
+		)->setMaxResults(5)->getResult();
+
+		return $books;
+	}	
+
 }
+

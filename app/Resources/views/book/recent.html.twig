@@ -2,12 +2,14 @@
   <div class="item">
     <br>
     <div class="pull-left">
-      {% if vich_uploader_asset(book, 'coverImage') is not null %}
-        <img src="{{ vich_uploader_asset(book, 'coverImage') | imagine_filter('s_thumb') }}" alt="{{ book.title }}" class="img-thumbnail" />
-      {% endif %}
+        <div class="pull-left">
+          {% if vich_uploader_asset(book, 'coverImage', 'PortalBundle\\Entity\\Book') is not null %}
+            <img src="{{ vich_uploader_asset(book, 'coverImage', 'PortalBundle\\Entity\\Book') | imagine_filter('s_thumb') }}" alt="{{ book.title }}" class="img-thumbnail" />
+          {% endif %}
+        </div> 
     </div>     
     <h3><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.title }}</a></h3>
-    <h4>by <a href="{{ path('author_show', { 'id': book.author.id }) }}">{{ book.author.name }}</a></h4>
+    <h4>by <a href="{{ path('author_show', { 'id': book.authorId }) }}">{{ book.authorName }}</a></h4>
     <select class="showRating">
       <option value="1">1</option>
       <option value="2">2</option>
@@ -21,15 +23,8 @@
       <option value="10">10</option>  
     </select>
 
-    {% set sumratings = 0 %}
-    {% for rating in book.ratings %}
-        {% set sumratings = sumratings + rating.rate %}
-    {% endfor %}
-    
-    {% if book.ratings|length > 0 %}
-      <span>{{ (sumratings / book.ratings|length)|round(2) }}</span>
-       ({{book.ratings|length}} votes, {{ book.reviews|length }} reviews)
-    {% endif %}
+    <span>{{ book.avgRating|round(2) }}</span>
+     ({{ book.ratingsCount }} votes, {{ book.reviewsCount }} reviews)
     
   </div>           
 {% endfor %}

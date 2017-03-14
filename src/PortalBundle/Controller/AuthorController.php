@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 /**
  * Author controller.
  *
- * @Route("author")
+ * @Route("authors")
  */
 class AuthorController extends Controller
 {

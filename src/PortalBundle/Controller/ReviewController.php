@@ -10,7 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component
 /**
  * Review controller.
  *
- * @Route("review")
+ * @Route("reviews")
  */
 class ReviewController extends Controller
 {

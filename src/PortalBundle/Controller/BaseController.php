@@ -16,10 +16,15 @@ class BaseController extends Controller
 
   public function recentAction()
   {
+      // $books = $this
+      //     ->getDoctrine()
+      //     ->getManager()
+      //     ->getRepository('PortalBundle:Book')->findBy(array(), array('publishDate' => 'DESC'));
+
       $books = $this
           ->getDoctrine()
           ->getManager()
-          ->getRepository('PortalBundle:Book')->findBy(array(), array('publishDate' => 'DESC'));
+          ->getRepository('PortalBundle:Book')->showRecentBooks();
 
       return $this->render('book/recent.html.twig', array(
           'books' => $books,

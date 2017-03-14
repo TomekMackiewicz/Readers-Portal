@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 /**
  * Translator controller.
  *
- * @Route("translator")
+ * @Route("translators")
  */
 class TranslatorController extends Controller
 {

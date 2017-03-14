@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 /**
  * Publisher controller.
  *
- * @Route("publisher")
+ * @Route("publishers")
  */
 class PublisherController extends Controller
 {

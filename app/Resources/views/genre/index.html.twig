@@ -1,1 +1,12 @@
-ok
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Genres</h1>
+
+    {% for genre in genres %}
+    	<li>{{ genre.name }}</li>
+    {% endfor %}
+
+<a href="{{ path('genre_new') }}" class="btn btn-default">Create a new genre</a>
+
+{% endblock %}
