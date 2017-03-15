@@ -44,16 +44,31 @@ class Reader extends BaseUser
     private $description;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="image", type="string", length=255, nullable=true)
+     * 
+     * @Vich\UploadableField(mapping="reader_image", fileNameProperty="imageName")
+     * @Assert\File(
+     *     maxSize = "1024k",
+     *     mimeTypes = {"image/jpeg", "image/png"},
+     *     mimeTypesMessage = "Please upload a valid image type (jpg)"
+     * )     
+     * 
+     * @var File      
      */
     private $image;
 
     /**
+     * @ORM\Column(name="imageName", type="string", length=255, nullable=true)
+     *
      * @var string
      */
-    private $imageFile;
+    private $imageName;
+
+    /**
+     * @var \Date
+     *
+     * @ORM\Column(name="updatedAt", type="date", nullable=true)         
+     */     
+    private $updatedAt;
 
     // -----------------------------------------
     //
@@ -172,14 +187,16 @@ class Reader extends BaseUser
     }
 
     /**
-     * Set image
-     *
-     * @param string $image
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $image
      * @return Reader
-     */
-    public function setImage($image)
+     */   
+    public function setImage(File $image = null)
     {
         $this->image = $image;
+
+        if ($image) {
+            $this->updatedAt = new \DateTimeImmutable();;
+        }
 
         return $this;
     }
@@ -187,11 +204,34 @@ class Reader extends BaseUser
     /**
      * Get image
      *
-     * @return string 
+     * @return File|null 
      */
     public function getImage()
     {
         return $this->image;
+    }
+
+    /**
+     * Set imageName
+     *
+     * @param string $imageName
+     * @return Reader
+     */
+    public function setImageName($imageName)
+    {
+        $this->imageName = $imageName;
+
+        return $this;
+    }
+
+    /**
+     * Get imageName
+     *
+     * @return string 
+     */
+    public function getImageName()
+    {
+        return $this->imageName;
     }
 
     /**

@@ -119,7 +119,7 @@ class BaseController extends Controller
               return $this->redirectToRoute('book_show', array('id' => $book->getId()));
 
           } else {
-              $ratingForm->addError(new FormError('You already voted on this book!'));
+              $ratingForm->addError(new FormError('You already rated this book!'));
           }                
       } 		
 	}

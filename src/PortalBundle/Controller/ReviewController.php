@@ -115,7 +115,7 @@ class ReviewController extends Controller
             $em->flush($review);
         }
 
-        return $this->redirectToRoute('review_index');
+        return $this->redirectToRoute('fos_user_profile_show');
     }
 
     /**

@@ -59,8 +59,15 @@ class ProfileController extends Controller
             throw new AccessDeniedException('This reader does not have access to this section.');
         }
 
+        $favouriteBooks = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('PortalBundle:FavouriteBook')
+            ->showFavouriteBooks($this->getUser()->getId()); 
+var_dump($favouriteBooks);
         return $this->render('@FOSUser/Profile/show.html.twig', array(
-            'reader' => $this->getUser()
+            'reader' => $this->getUser(),
+            'favouriteBooks' => $favouriteBooks
         ));
     }
 
