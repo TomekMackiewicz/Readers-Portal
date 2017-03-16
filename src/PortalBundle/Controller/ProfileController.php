@@ -59,15 +59,50 @@ class ProfileController extends Controller
             throw new AccessDeniedException('This reader does not have access to this section.');
         }
 
+        $books = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('PortalBundle:Reader')
+            ->getReaderBooks($this->getUser()->getId());
+
+        $ratings = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('PortalBundle:Reader')
+            ->getReaderRatings($this->getUser()->getId());
+
+        $reviews = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('PortalBundle:Reader')
+            ->getReaderReviews($this->getUser()->getId());
+
         $favouriteBooks = $this
             ->getDoctrine()
             ->getManager()
             ->getRepository('PortalBundle:FavouriteBook')
             ->showFavouriteBooks($this->getUser()->getId()); 
-var_dump($favouriteBooks);
+
+        $currentBooks = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('PortalBundle:CurrentBook')
+            ->showCurrentBooks($this->getUser()->getId());
+
+        $wantedBooks = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('PortalBundle:WantedBook')
+            ->showWantedBooks($this->getUser()->getId());
+
         return $this->render('@FOSUser/Profile/show.html.twig', array(
             'reader' => $this->getUser(),
-            'favouriteBooks' => $favouriteBooks
+            'books' => $books,
+            'ratings' => $ratings,
+            'reviews' => $reviews,
+            'favouriteBooks' => $favouriteBooks,
+            'currentBooks' => $currentBooks,
+            'wantedBooks' => $wantedBooks
         ));
     }
 

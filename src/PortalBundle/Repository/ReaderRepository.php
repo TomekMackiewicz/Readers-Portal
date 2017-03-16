@@ -12,4 +12,76 @@ use Doctrine\ORM\EntityRepository;
  */
 class ReaderRepository extends EntityRepository
 {
+
+	// public function getReader($readerId) {
+	// 	$reader = $this->getEntityManager()->createQuery(
+	// 		"SELECT 
+	// 				r.id,
+	// 				r.nick,
+	// 				r.username,
+	// 				r.email,
+	// 				r.description,
+	// 				r.imageName														   
+	// 		 FROM PortalBundle:Reader r 		 
+	// 		 WHERE r.id = $readerId"
+	// 	)->getSingleResult();
+
+	// 	return $reader;
+	// }
+
+	public function getReaderBooks($readerId) {
+		$readerBooks = $this->getEntityManager()->createQuery(
+			"SELECT 
+					r.id,
+					b.id AS id, 
+					b.title AS title,
+					b.imageName AS imageName,					
+					a.id AS authorId,					
+					a.name AS authorName   
+			 FROM PortalBundle:Reader r 
+			 JOIN r.books b			 
+			 JOIN b.author a
+			 WHERE r.id = $readerId			 
+			 ORDER BY b.addDate DESC"
+		)->getResult();
+
+		return $readerBooks;
+	}
+
+	public function getReaderRatings($readerId) {
+		$readerRatings = $this->getEntityManager()->createQuery(
+			"SELECT 
+					r.id,
+					b.id AS bookId, 
+					b.title AS bookTitle,
+					rat.rate AS rate  
+			 FROM PortalBundle:Reader r 
+			 JOIN r.ratings rat	
+			 JOIN rat.book b		 
+			 WHERE r.id = $readerId			 
+			 ORDER BY rat.id DESC"
+		)->getResult();
+
+		return $readerRatings;		
+	}
+
+	public function getReaderReviews($readerId) {
+		$readerReviews = $this->getEntityManager()->createQuery(
+			"SELECT 
+					r.id,
+					b.id AS bookId, 
+					b.title AS bookTitle,
+					rev.id AS id,
+					rev.publishDate AS publishDate  
+			 FROM PortalBundle:Reader r 
+			 JOIN r.reviews rev	
+			 JOIN rev.book b		 
+			 WHERE r.id = $readerId			 
+			 ORDER BY publishDate DESC"
+		)->getResult();
+
+		return $readerReviews;		
+	}
+
+
 }

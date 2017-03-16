@@ -10,4 +10,25 @@ namespace PortalBundle\Repository;
  */
 class WantedBookRepository extends \Doctrine\ORM\EntityRepository
 {
+
+	public function showWantedBooks($readerId) {
+		$wantedBooks = $this->getEntityManager()->createQuery(
+			"SELECT 
+					r.id,
+					b.id AS id, 
+					b.title AS title,
+					b.imageName AS imageName,					
+					a.id AS authorId,					
+					a.name AS authorName   
+			 FROM PortalBundle:Reader r 
+			 JOIN r.wantedBooks f
+			 JOIN f.book b			 
+			 JOIN b.author a
+			 WHERE r.id = $readerId			 
+			 ORDER BY b.addDate DESC"
+		)->getResult();
+
+		return $wantedBooks;
+	}
+
 }
