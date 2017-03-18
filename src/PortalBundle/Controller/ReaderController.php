@@ -64,14 +64,66 @@ class ReaderController extends Controller
      * @Route("/{id}", name="reader_show")
      * @Method("GET")
      */
-    public function showAction(Reader $reader)
+    public function showAction(Reader $reader, $id)
     {
-        $deleteForm = $this->createDeleteForm($reader);
+        // $deleteForm = $this->createDeleteForm($reader);
+
+        // return $this->render('reader/show.html.twig', array(
+        //     'reader' => $reader,
+        //     'delete_form' => $deleteForm->createView(),
+        // ));
+
+        $reader = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('PortalBundle:Reader')->find($id);
+
+        $books = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('PortalBundle:Reader')
+            ->getReaderBooks($id);
+
+        $ratings = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('PortalBundle:Reader')
+            ->getReaderRatings($id);
+
+        $reviews = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('PortalBundle:Reader')
+            ->getReaderReviews($id);
+
+        $favouriteBooks = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('PortalBundle:FavouriteBook')
+            ->showFavouriteBooks($id); 
+
+        $currentBooks = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('PortalBundle:CurrentBook')
+            ->showCurrentBooks($id);
+
+        $wantedBooks = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('PortalBundle:WantedBook')
+            ->showWantedBooks($id);
 
         return $this->render('reader/show.html.twig', array(
             'reader' => $reader,
-            'delete_form' => $deleteForm->createView(),
+            'books' => $books,
+            'ratings' => $ratings,
+            'reviews' => $reviews,
+            'favouriteBooks' => $favouriteBooks,
+            'currentBooks' => $currentBooks,
+            'wantedBooks' => $wantedBooks
         ));
+
     }
 
     /**

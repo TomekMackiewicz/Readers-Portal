@@ -106,7 +106,7 @@
                 <div class="panel panel-default">
                     {% for review in book.reviews %}
                         <div class="panel-heading">
-                            <strong>{{review.reader}}</strong>, 
+                            <strong><a href="{{path('reader_show', {'id':review.reader.id} )}}">{{review.reader}}</a></strong>, 
                             {{review.publishDate|date('Y-m-d')}} 
                             {% if review.rate %}
                                 <span class="hidden">{{review.rate}}</span>
