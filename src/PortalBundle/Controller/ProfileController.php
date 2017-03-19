@@ -1,32 +1,5 @@
 <?php
 
-// //use FOS\UserBundle\Event\FilterUserResponseEvent;
-// //use FOS\UserBundle\Event\FormEvent;
-// //use FOS\UserBundle\Event\GetResponseUserEvent;
-// //use FOS\UserBundle\Form\Factory\FactoryInterface;
-// use FOS\UserBundle\FOSUserEvents;
-// use FOS\UserBundle\Model\UserInterface;
-// use FOS\UserBundle\Model\UserManagerInterface;
-// use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-// //use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-// //use Symfony\Component\HttpFoundation\RedirectResponse;
-// use Symfony\Component\HttpFoundation\Request;
-// use Symfony\Component\HttpFoundation\Response;
-// //use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-// use InventoryBundle\Entity\Reader;
-// //use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-// use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-// use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-
-/*
- * This file is part of the FOSUserBundle package.
- *
- * (c) FriendsOfSymfony <http://friendsofsymfony.github.com/>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace PortalBundle\Controller;
 
 use FOS\UserBundle\Event\FilterUserResponseEvent;
@@ -48,61 +21,31 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  *
  * @author Christophe Coevoet <stof@notk.org>
  */
-class ProfileController extends Controller
+class ProfileController extends BaseController
 {
     /**
-     * Show the reader.
+     * Show reader's profile.
      */
     public function showAction()
     {
         if (!is_object($this->getUser()) || !$this->getUser() instanceof UserInterface) {
             throw new AccessDeniedException('This reader does not have access to this section.');
         }
-
-        $books = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('PortalBundle:Reader')
-            ->getReaderBooks($this->getUser()->getId());
-
-        $ratings = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('PortalBundle:Reader')
-            ->getReaderRatings($this->getUser()->getId());
-
-        $reviews = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('PortalBundle:Reader')
-            ->getReaderReviews($this->getUser()->getId());
-
-        $favouriteBooks = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('PortalBundle:FavouriteBook')
-            ->showFavouriteBooks($this->getUser()->getId()); 
-
-        $currentBooks = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('PortalBundle:CurrentBook')
-            ->showCurrentBooks($this->getUser()->getId());
-
-        $wantedBooks = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('PortalBundle:WantedBook')
-            ->showWantedBooks($this->getUser()->getId());
+        $books          = $this->getRepo('PortalBundle:Reader')->getReaderBooks($this->getUser()->getId());
+        $ratings        = $this->getRepo('PortalBundle:Reader')->getReaderRatings($this->getUser()->getId());
+        $reviews        = $this->getRepo('PortalBundle:Reader')->getReaderReviews($this->getUser()->getId());
+        $favouriteBooks = $this->getRepo('PortalBundle:FavouriteBook')->showFavouriteBooks($this->getUser()->getId()); 
+        $currentBooks   = $this->getRepo('PortalBundle:CurrentBook')->showCurrentBooks($this->getUser()->getId());
+        $wantedBooks    = $this->getRepo('PortalBundle:WantedBook')->showWantedBooks($this->getUser()->getId());
 
         return $this->render('@FOSUser/Profile/show.html.twig', array(
-            'reader' => $this->getUser(),
-            'books' => $books,
-            'ratings' => $ratings,
-            'reviews' => $reviews,
-            'favouriteBooks' => $favouriteBooks,
-            'currentBooks' => $currentBooks,
-            'wantedBooks' => $wantedBooks
+            'reader'            => $this->getUser(),
+            'books'             => $books,
+            'ratings'           => $ratings,
+            'reviews'           => $reviews,
+            'favouriteBooks'    => $favouriteBooks,
+            'currentBooks'      => $currentBooks,
+            'wantedBooks'       => $wantedBooks
         ));
     }
 
@@ -120,7 +63,6 @@ class ProfileController extends Controller
             throw new AccessDeniedException('This reader does not have access to this section.');
         }
 
-        /** @var $dispatcher EventDispatcherInterface */
         $dispatcher = $this->get('event_dispatcher');
 
         $event = new GetResponseUserEvent($reader, $request);
@@ -130,7 +72,6 @@ class ProfileController extends Controller
             return $event->getResponse();
         }
 
-        /** @var $formFactory FactoryInterface */
         $formFactory = $this->get('fos_user.profile.form.factory');
 
         $form = $formFactory->createForm();
@@ -139,7 +80,6 @@ class ProfileController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var $userManager UserManagerInterface */
             $userManager = $this->get('fos_user.user_manager');
 
             $event = new FormEvent($form, $request);

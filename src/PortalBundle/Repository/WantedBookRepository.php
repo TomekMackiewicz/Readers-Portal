@@ -10,7 +10,6 @@ namespace PortalBundle\Repository;
  */
 class WantedBookRepository extends \Doctrine\ORM\EntityRepository
 {
-
 	public function showWantedBooks($readerId) {
 		$wantedBooks = $this->getEntityManager()->createQuery(
 			"SELECT 

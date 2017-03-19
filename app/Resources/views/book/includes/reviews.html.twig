@@ -1,0 +1,38 @@
+<h4>Reviews</h4>
+
+{% if book.reviews|length > 0 %}
+
+    <p>Filter, sort</p>
+    <div class="panel panel-default">
+
+        {% for review in book.reviews %}
+
+            <div class="panel-heading">
+                <strong><a href="{{ path('reader_show', {'id':review.reader.id} ) }}">{{ review.reader }}</a></strong>,
+                {{ review.publishDate|date('Y-m-d') }} 
+
+                {% if review.rate %}
+
+                    <span class="hidden">{{ review.rate }}</span>
+                    <select class="showReaderRating">
+
+                        {% for i in 1..10 %}
+                            <option value="{{ i }}">{{ i }}</option>
+                        {% endfor %} 
+
+                    </select>  
+
+                {% endif %}
+
+            </div>        
+            <div class="panel-body">{{ review.contents }}</div> 
+
+        {% endfor %}
+
+    </div>
+
+{% else %}
+
+    No reviews yet.
+    
+{% endif %}

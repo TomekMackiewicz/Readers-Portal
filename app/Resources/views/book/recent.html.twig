@@ -1,32 +1,27 @@
 {% for book in books %}
-  <div class="item">
-    <br>
-    <div class="pull-left">
-        <div class="pull-left">
-          {% if vich_uploader_asset(book, 'coverImage', 'PortalBundle\\Entity\\Book') is not null %}
-            <img src="{{ vich_uploader_asset(book, 'coverImage', 'PortalBundle\\Entity\\Book') | imagine_filter('s_thumb') }}" alt="{{ book.title }}" class="img-thumbnail" />
-          {% else %}
-            <img src="http://placehold.it/110x157?text=No image" class="img-thumbnail pull-left">
-          {% endif %}
-        </div> 
-    </div>     
-    <h3><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.title }}</a></h3>
-    <h4>by <a href="{{ path('author_show', { 'id': book.authorId }) }}">{{ book.authorName }}</a></h4>
-    <select class="showRating">
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-      <option value="8">8</option>
-      <option value="9">9</option>
-      <option value="10">10</option>  
-    </select>
 
-    <span>{{ book.avgRating|round(2) }}</span>
-     ({{ book.ratingsCount }} votes, {{ book.reviewsCount }} reviews)
-    
-  </div>           
+    <div class="item">
+        <br>
+        <div class="pull-left">
+            <div class="pull-left">
+                {% if vich_uploader_asset(book, 'coverImage', 'PortalBundle\\Entity\\Book') is not null %}
+                    <img src="{{ vich_uploader_asset(book, 'coverImage', 'PortalBundle\\Entity\\Book')|imagine_filter('s_thumb') }}" alt="{{ book.title }}" class="img-thumbnail" />
+                {% else %}
+                    <img src="http://placehold.it/110x157?text=No image" class="img-thumbnail pull-left">
+                {% endif %}
+            </div> 
+        </div>     
+        <h3><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.title }}</a></h3>
+        <h4>by <a href="{{ path('author_show', { 'id': book.authorId }) }}">{{ book.authorName }}</a></h4>
+        <select class="showRating">
+
+            {% for i in 1..10 %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endfor %}
+            
+        </select>
+        <span>{{ book.avgRating|round(2) }}</span>
+         ({{ book.ratingsCount }} votes, {{ book.reviewsCount }} reviews)
+    </div>
+
 {% endfor %}

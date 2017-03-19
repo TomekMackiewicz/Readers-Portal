@@ -24,9 +24,7 @@ class TranslatorController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $translators = $em->getRepository('PortalBundle:Translator')->findAll();
+        $translators = $this->getRepo('PortalBundle:Translator')->findAll();
 
         return $this->render('translator/index.html.twig', array(
             'translators' => $translators,
@@ -160,7 +158,6 @@ class TranslatorController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('translator_delete', array('id' => $translator->getId())))
             ->setMethod('DELETE')
-            ->getForm()
-        ;
+            ->getForm();
     }
 }

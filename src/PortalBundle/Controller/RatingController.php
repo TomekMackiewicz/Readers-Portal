@@ -10,9 +10,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component
 /**
  * Rating controller.
  *
- * @Route("rating")
+ * @Route("ratings")
  */
-class RatingController extends Controller
+class RatingController extends BaseController
 {
     /**
      * Lists all rating entities.
@@ -22,9 +22,7 @@ class RatingController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $ratings = $em->getRepository('PortalBundle:Rating')->findAll();
+        $ratings = $this->getRepo('PortalBundle:Rating')->findAll();
 
         return $this->render('rating/index.html.twig', array(
             'ratings' => $ratings,
@@ -130,7 +128,6 @@ class RatingController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('rating_delete', array('id' => $rating->getId())))
             ->setMethod('DELETE')
-            ->getForm()
-        ;
+            ->getForm();
     }
 }

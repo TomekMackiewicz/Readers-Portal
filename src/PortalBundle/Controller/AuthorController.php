@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *
  * @Route("authors")
  */
-class AuthorController extends Controller
+class AuthorController extends BaseController
 {
     /**
      * Lists all author entities.
@@ -24,9 +24,7 @@ class AuthorController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $authors = $em->getRepository('PortalBundle:Author')->findAll();
+        $authors = $this->getRepo('PortalBundle:Author')->findAll();
 
         return $this->render('author/index.html.twig', array(
             'authors' => $authors,

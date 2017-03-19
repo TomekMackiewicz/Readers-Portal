@@ -33,10 +33,7 @@ class BookController extends BaseController
      */
     public function indexAction()
     {
-        $books = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('PortalBundle:Book')->showRecentBooks(); 
+        $books = $this->getRepo('PortalBundle:Book')->showRecentBooks(); 
 
         return $this->render('book/index.html.twig', array(
             'books' => $books,
@@ -51,10 +48,7 @@ class BookController extends BaseController
      */
     public function topAction()
     {
-        $books = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('PortalBundle:Book')->showTopRatedBooks(); 
+        $books = $this->getRepo('PortalBundle:Book')->showTopRatedBooks(); 
 
         return $this->render('book/top.html.twig', array(
             'books' => $books,
@@ -69,10 +63,7 @@ class BookController extends BaseController
      */
     public function popularAction()
     {
-        $books = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('PortalBundle:Book')->showPopularBooks(); 
+        $books = $this->getRepo('PortalBundle:Book')->showPopularBooks(); 
 
         return $this->render('book/popular.html.twig', array(
             'books' => $books,
@@ -149,10 +140,10 @@ class BookController extends BaseController
         $reviewForm = $this->createForm('PortalBundle\Form\ReviewType')->handleRequest($request);
         $ratingForm = $this->createForm('PortalBundle\Form\RatingType')->handleRequest($request);
 
-        $checkReadersUniqueRating = $this->getRatingRepo()
+        $checkReadersUniqueRating = $this->getRepo('PortalBundle:Rating')
             ->checkReadersUniqueRating($this->getUser()->getId(), $book->getId());
 
-        $checkReadersUniqueReview = $this->getReviewRepo()
+        $checkReadersUniqueReview = $this->getRepo('PortalBundle:Review')
             ->checkReadersUniqueReview($this->getUser()->getId(), $book->getId());
 
         $this->setReview($request, $reviewForm, $checkReadersUniqueReview, $checkReadersUniqueRating, $book);
@@ -244,17 +235,11 @@ class BookController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $wantedBook = $this
-                ->getDoctrine()
-                ->getManager()
-                ->getRepository('PortalBundle:WantedBook')->findOneBy(array(
+            $wantedBook = $this->getRepo('PortalBundle:WantedBook')->findOneBy(array(
                     'reader' => $this->getUser()->getId(), 
                     'book' => $book->getId()
                 ));
-            $currentBook = $this
-                ->getDoctrine()
-                ->getManager()
-                ->getRepository('PortalBundle:CurrentBook')->findOneBy(array(
+            $currentBook = $this->getRepo('PortalBundle:CurrentBook')->findOneBy(array(
                     'reader' => $this->getUser()->getId(), 
                     'book' => $book->getId()
                 )); 
@@ -307,10 +292,7 @@ class BookController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $wantedBook = new WantedBook();
-            $currentBook = $this
-                ->getDoctrine()
-                ->getManager()
-                ->getRepository('PortalBundle:CurrentBook')->findOneBy(array(
+            $currentBook = $this->getRepo('PortalBundle:CurrentBook')->findOneBy(array(
                     'reader' => $this->getUser()->getId(), 
                     'book' => $book->getId()
                 ));
@@ -332,7 +314,6 @@ class BookController extends BaseController
             $request->getSession()
                 ->getFlashBag()
                 ->add('success', 'Book added to wanted!');
-
         }
 
         return $this->redirectToRoute('book_show', array('id' => $book->getId()));
@@ -366,10 +347,7 @@ class BookController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $currentBook = new CurrentBook();
-            $wantedBook = $this
-                ->getDoctrine()
-                ->getManager()
-                ->getRepository('PortalBundle:WantedBook')->findOneBy(array(
+            $wantedBook = $this->getRepo('PortalBundle:WantedBook')->findOneBy(array(
                     'reader' => $this->getUser()->getId(), 
                     'book' => $book->getId()
                 ));                

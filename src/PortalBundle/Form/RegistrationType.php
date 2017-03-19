@@ -6,16 +6,16 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class RegistrationType extends AbstractType {
 
-  public function buildForm(FormBuilderInterface $builder, array $options) {
-    $builder->add('nick');
-  }
+	public function buildForm(FormBuilderInterface $builder, array $options) {
+		$builder->add('nick');
+	}
 
-  public function getParent() {
-    return 'FOS\UserBundle\Form\Type\RegistrationFormType';
-  }
+	public function getParent() {
+		return 'FOS\UserBundle\Form\Type\RegistrationFormType';
+	}
 
-  public function getBlockPrefix() {
-    return 'app_user_registration';
-  }
+	public function getBlockPrefix() {
+		return 'app_user_registration';
+	}
   
 }

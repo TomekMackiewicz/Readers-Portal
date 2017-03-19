@@ -13,15 +13,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  *
  * @Route("genres")
  */
-class GenreController extends Controller
+class GenreController extends BaseController
 {
     /**
      * @Route("/", name="genre_index")
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $genres = $em->getRepository('PortalBundle:Genre')->findAll();
+        $genres = $this->getRepo('PortalBundle:Genre')->findAll();
 
         return $this->render('genre/index.html.twig', array(
             'genres' => $genres,
@@ -62,23 +61,9 @@ class GenreController extends Controller
     public function showAction(Genre $genre)
     {
         //$deleteForm = $this->createDeleteForm($genre);
-        $recentBooks = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('PortalBundle:Genre')
-            ->showRecentBooks($genre->getId()); 
-
-        $topBooks = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('PortalBundle:Genre')
-            ->showTopRatedBooks($genre->getId());
-
-        $popularBooks = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('PortalBundle:Genre')
-            ->showPopularBooks($genre->getId());
+        $recentBooks = $this->getRepo('PortalBundle:Genre')->showRecentBooks($genre->getId()); 
+        $topBooks = $this->getRepo('PortalBundle:Genre')->showTopRatedBooks($genre->getId());
+        $popularBooks = $this->getRepo('PortalBundle:Genre')->showPopularBooks($genre->getId());
 
         return $this->render('genre/show.html.twig', array(
             'genre' => $genre,
@@ -146,8 +131,7 @@ class GenreController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('genre_delete', array('id' => $genre->getId())))
             ->setMethod('DELETE')
-            ->getForm()
-        ;
+            ->getForm();
     }
 
 }

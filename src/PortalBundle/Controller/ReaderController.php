@@ -11,9 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Reader controller.
  *
- * @Route("reader")
+ * @Route("readers")
  */
-class ReaderController extends Controller
+class ReaderController extends BaseController
 {
     /**
      * Lists all reader entities.
@@ -23,9 +23,7 @@ class ReaderController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $readers = $em->getRepository('PortalBundle:Reader')->findAll();
+        $readers = $this->getRepo('PortalBundle:Reader')->findAll();
 
         return $this->render('reader/index.html.twig', array(
             'readers' => $readers,
@@ -66,53 +64,13 @@ class ReaderController extends Controller
      */
     public function showAction(Reader $reader, $id)
     {
-        // $deleteForm = $this->createDeleteForm($reader);
-
-        // return $this->render('reader/show.html.twig', array(
-        //     'reader' => $reader,
-        //     'delete_form' => $deleteForm->createView(),
-        // ));
-
-        $reader = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('PortalBundle:Reader')->find($id);
-
-        $books = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('PortalBundle:Reader')
-            ->getReaderBooks($id);
-
-        $ratings = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('PortalBundle:Reader')
-            ->getReaderRatings($id);
-
-        $reviews = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('PortalBundle:Reader')
-            ->getReaderReviews($id);
-
-        $favouriteBooks = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('PortalBundle:FavouriteBook')
-            ->showFavouriteBooks($id); 
-
-        $currentBooks = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('PortalBundle:CurrentBook')
-            ->showCurrentBooks($id);
-
-        $wantedBooks = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('PortalBundle:WantedBook')
-            ->showWantedBooks($id);
+        $reader = $this->getRepo('PortalBundle:Reader')->find($id);
+        $books = $this->getRepo('PortalBundle:Reader')->getReaderBooks($id);
+        $ratings = $this->getRepo('PortalBundle:Reader')->getReaderRatings($id);
+        $reviews = $this->getRepo('PortalBundle:Reader')->getReaderReviews($id);
+        $favouriteBooks = $this->getRepo('PortalBundle:FavouriteBook')->showFavouriteBooks($id); 
+        $currentBooks = $this->getRepo('PortalBundle:CurrentBook')->showCurrentBooks($id);
+        $wantedBooks = $this->getRepo('PortalBundle:WantedBook')->showWantedBooks($id);
 
         return $this->render('reader/show.html.twig', array(
             'reader' => $reader,
@@ -123,7 +81,6 @@ class ReaderController extends Controller
             'currentBooks' => $currentBooks,
             'wantedBooks' => $wantedBooks
         ));
-
     }
 
     /**
@@ -183,7 +140,6 @@ class ReaderController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('reader_delete', array('id' => $reader->getId())))
             ->setMethod('DELETE')
-            ->getForm()
-        ;
+            ->getForm();
     }
 }

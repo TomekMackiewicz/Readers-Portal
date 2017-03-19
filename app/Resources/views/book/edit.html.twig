@@ -1,22 +1,25 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
     <h1>Book edit</h1>
 
     {{ form_start(edit_form) }}
         {{ form_widget(edit_form) }}
         <p>
+
 				{% for tag in book.getTags %}
 				   {% if tag %}
 				       <span>
 				       {{ tag.name }}
 				       {% for tr in tag.getTagRelation %}
-				           <a href="{{ path('mykees_delete_relation',{'relation_id':tr.id}) }}" class="delTag">[x]
+				           <a href="{{ path('mykees_delete_relation', {'relation_id':tr.id}) }}" class="delTag">[x]
 				           </a>
 				       {% endfor %}
 				       </span>
 				   {% endif %}
-				{% endfor %}  
+				{% endfor %}
+
 				</p>
         <input type="submit" value="Edit" class="btn btn-default" />
     {{ form_end(edit_form) }}
@@ -30,6 +33,8 @@
 {% endblock %}
 
 {% block javascripts %}
+
     {{ parent() }}
     {{ mk_tag_javascript() }}
+
 {% endblock %}

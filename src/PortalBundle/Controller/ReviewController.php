@@ -5,7 +5,8 @@ namespace PortalBundle\Controller;
 use PortalBundle\Entity\Review;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Review controller.
@@ -22,9 +23,7 @@ class ReviewController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $reviews = $em->getRepository('PortalBundle:Review')->findAll();
+        $reviews = $this->getRepo('PortalBundle:Review')->findAll();
 
         return $this->render('review/index.html.twig', array(
             'reviews' => $reviews,
@@ -130,7 +129,6 @@ class ReviewController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('review_delete', array('id' => $review->getId())))
             ->setMethod('DELETE')
-            ->getForm()
-        ;
+            ->getForm();
     }
 }

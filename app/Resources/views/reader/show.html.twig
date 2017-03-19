@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
      <div class="pull-left">
         {% if vich_uploader_asset(reader, 'image') is not null %}
             <img src="{{ vich_uploader_asset(reader, 'image') | imagine_filter('s_thumb') }}" alt="{{ reader.username }}" class="img-thumbnail" />

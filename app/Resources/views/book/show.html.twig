@@ -2,65 +2,25 @@
 
 {% block body %}
 
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">Rating Details</h4>
-          </div>
-          <div class="modal-body">
-            <table class="table table-borderless table-condensed">
-            {% set sum = 0 %}
-            {% for i in 1..10 %}
-                {% set singleSum = 0 %}
-                {% for rating in book.ratings %}
-                    {% if i == rating.rate %}
-                        {% set singleSum = singleSum + 1 %}
-                    {% endif %}
-                {% endfor %}
-                <tr>
-                    <th class="col-md-1">
-                        <span class="pull-left"> {{i}}</span>
-                    </th>
-                    <td class="col-md-11">
-                        <div class="progress">
-                          <div class="progress-bar" role="progressbar" aria-valuenow="{{singleSum}}" aria-valuemin="1" aria-valuemax="{{book.ratings|length}}" style="width: {{singleSum * 10}}%;">
-                            {{singleSum}}
-                          </div>
-                        </div>
-                    </td>
-                </tr>
-            {% endfor %} 
-            </table>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    {{ include('book/includes/modal.html.twig') }}
 
     <div class="row">
         <div class="col-md-8">
+
             {% if vich_uploader_asset(book, 'coverImage') is not null %}
-                <img src="{{ vich_uploader_asset(book, 'coverImage') | imagine_filter('thumb') }}" alt="{{ book.title }}" class="img-thumbnail img-show pull-left" />
+                <img src="{{ vich_uploader_asset(book, 'coverImage')|imagine_filter('thumb') }}" alt="{{ book.title }}" class="img-thumbnail img-show pull-left" />
             {% else %}
                 <img src="http://placehold.it/220x313?text=No image" class="img-thumbnail img-show pull-left">
             {% endif %}
+
             <h3>{{ book.title }}</h3>
             <h4>by <a href="{{ path('author_show', { 'id': book.author.id }) }}">{{ book.author.name }}</a></h4>
             <select class="showRating">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>  
+
+                {% for i in 1..10 %}
+                    <option value="{{ i }}">{{ i }}</option>
+                {% endfor %} 
+
             </select>
 
             {% set sumratings = 0 %}
@@ -77,145 +37,57 @@
             {% else %}
                 <span id="avgRate">0</span> ratings, 0 reviews.               
             {% endif %}
+
             <hr> 
             <p>{{ book.description }}</p>
             <hr>
-            {% if book.publishDate %}<small>Published: {{ book.publishDate|date('Y') }}</small><br>{% endif %}
-            <small>Added: {{ book.addDate|date('Y-m-d') }}</small><br>   
-            {% if book.translator %}<small>Translator: {{ book.translator.name }}</small><br>{% endif %}    
-            {% if book.publisher %}<small>Publisher: {{ book.publisher.name }}</small>{% endif %}<br>
+
+            {% if book.publishDate %}
+                <small>Published: {{ book.publishDate|date('Y') }}</small>
+                <br>
+            {% endif %}
+
+            <small>Added: {{ book.addDate|date('Y-m-d') }}</small>
+            <br>
+
+            {% if book.translator %}
+                <small>Translator: {{ book.translator.name }}</small>
+                <br>
+            {% endif %}    
+            
+            {% if book.publisher %}
+                <small>Publisher: {{ book.publisher.name }}</small>
+                <br>
+            {% endif %}
+            
             <small>ISBN: {{ book.isbn }}</small><br>
             <small>Genre(s):
+
                 {% for genre in book.genres %}
                     {{genre.name}}
                 {% endfor %}
+
             </small><br>
             <small>Tag(s):
+
                 {% if book.getTags() %}
                     {% for tag in book.getTags %}
                         {{ tag.name }}
                     {% endfor %}
                 {% endif %}
+
             </small>
             <hr>
             <div class="clearfix"></div>
 
-            <h4>Reviews</h4>
-            {% if book.reviews|length > 0 %}
-                <p>Filter, sort</p>
-                <div class="panel panel-default">
-                    {% for review in book.reviews %}
-                        <div class="panel-heading">
-                            <strong><a href="{{path('reader_show', {'id':review.reader.id} )}}">{{review.reader}}</a></strong>, 
-                            {{review.publishDate|date('Y-m-d')}} 
-                            {% if review.rate %}
-                                <span class="hidden">{{review.rate}}</span>
-                                <select class="showReaderRating">
-                                  <option value="1">1</option>
-                                  <option value="2">2</option>
-                                  <option value="3">3</option>
-                                  <option value="4">4</option>
-                                  <option value="5">5</option>
-                                  <option value="6">6</option>
-                                  <option value="7">7</option>
-                                  <option value="8">8</option>
-                                  <option value="9">9</option>
-                                  <option value="10">10</option>  
-                                </select>                            
-                            {% endif %}
-                        </div>        
-                        <div class="panel-body">{{review.contents}}</div>   
-                    {% endfor %}
-                </div>
-            {% else %}
-                No reviews yet.
-            {% endif %}
+            {{ include('book/includes/reviews.html.twig') }}
+
         </div>
        
         <div class="col-md-4">
 
-            {% if is_granted('ROLE_ADMIN') %}
-
-                <h3>Admin options</h3>
-                <a href="{{ path('book_edit', { 'id': book.id }) }}" class="btn btn-default pull-left">Edit</a>
-
-                {{ form_start(delete_form) }}
-                    <input type="submit" value="Delete" class="btn btn-danger">
-                {{ form_end(delete_form) }}
-                {% endif %}
-
-            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-
-                <h4>Rate this book</h4>
-                {{ form_start(rating_form, {
-                    'action': path('book_show', { 'id': book.id }), 
-                    'method': 'POST',
-                    'attr': {
-                        'id': 'ratingForm',
-                        'class': 'form-inline'
-                        }
-                    }) 
-                }}
-                {{ form_errors(rating_form) }}
-                {{ form_row(rating_form.rate) }}
-                    <input type="submit" value="Rate" class="btn btn-default btn-xs"> 
-                {{ form_end(rating_form) }}
-                <hr>
-                <h4>Add review</h4>
-                {{ form_start(review_form, {
-                    'action': path('book_show', { 'id': book.id }), 
-                    'method': 'POST'
-                    }) 
-                }}
-                {{ form_errors(review_form) }}
-                {{ form_widget(review_form) }}
-                    <input type="submit" value="Add review" class="btn btn-default btn-xs"> 
-                {{ form_end(review_form) }}
-
-            {% else %}
-                <p>Please, log in to rate and add reviews.</p>
-            {% endif %}    
-
-            <hr>
-
-            {% if app.session.flashBag.has('success') %}
-                <div class="alert alert-success">
-                    {% for msg in app.session.flashBag.get('success') %}
-                        {{ msg }}
-                    {% endfor %}
-                </div>
-            {% endif %}
-
-            {{ form_start(read_form) }}
-                <input type="submit" value="Mark as Read" class="btn btn-default btn-xs">
-            {{ form_end(read_form) }}
-
-            {{ form_start(favourite_form) }}
-                <input type="submit" value="Add to favourites" class="btn btn-default btn-xs">
-            {{ form_end(favourite_form) }}
-
-            {{ form_start(wanted_form) }}
-                <input type="submit" value="Add to wanted" class="btn btn-default btn-xs">
-            {{ form_end(wanted_form) }}
-
-            {{ form_start(current_form) }}
-                <input type="submit" value="Add to current" class="btn btn-default btn-xs">
-            {{ form_end(current_form) }}           
-
-            <hr>
-            <h4>About {{ book.author.name }}</h4>
-    {% if vich_uploader_asset(book.author, 'image') is not null %}
-        <img src="{{ vich_uploader_asset(book.author, 'image') | imagine_filter('s_thumb') }}" alt="{{ book.author.name }}" class="img-thumbnail pull-left" />
-    {% endif %}
-    <p>{{ book.author.description }}</p>            
-            <hr>            
-            <h4>On Shelves</h4>
-            <p>Want to read: {{book.wantedBooks|length}}</p>
-            <p>Currently reading: {{book.currentBooks|length}}</p>            
-            <p>Read: {{book.readers|length}}</p>
-            <p>Favourites: {{book.favouriteBooks|length}}</p>
-            <hr>
-            <h4>Quotes</h4>            
+            {{ include('book/includes/sidebar.html.twig') }}
+         
         </div>
     </div>        
 

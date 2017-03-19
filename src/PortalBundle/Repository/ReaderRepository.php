@@ -12,23 +12,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class ReaderRepository extends EntityRepository
 {
-
-	// public function getReader($readerId) {
-	// 	$reader = $this->getEntityManager()->createQuery(
-	// 		"SELECT 
-	// 				r.id,
-	// 				r.nick,
-	// 				r.username,
-	// 				r.email,
-	// 				r.description,
-	// 				r.imageName														   
-	// 		 FROM PortalBundle:Reader r 		 
-	// 		 WHERE r.id = $readerId"
-	// 	)->getSingleResult();
-
-	// 	return $reader;
-	// }
-
 	public function getReaderBooks($readerId) {
 		$readerBooks = $this->getEntityManager()->createQuery(
 			"SELECT 
