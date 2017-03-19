@@ -1,18 +1,14 @@
 {% if is_granted('ROLE_ADMIN') %}
-
     <h3>Admin options</h3>
-    <a href="{{ path('book_edit', { 'id': book.id }) }}" class="btn btn-default pull-left">Edit</a>
+    <a href="{{ path('book_edit', {'id': book.id}) }}" class="btn btn-default pull-left">Edit</a>
     {{ form_start(delete_form) }}
         <input type="submit" value="Delete" class="btn btn-danger">
     {{ form_end(delete_form) }}
-
 {% endif %}
-
 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-
     <h4>Rate this book</h4>
     {{ form_start(rating_form, {
-        'action': path('book_show', { 'id': book.id }), 
+        'action': path('book_show', {'id': book.id}), 
         'method': 'POST',
         'attr': {
             'id': 'ratingForm',
@@ -27,7 +23,7 @@
     <hr>
     <h4>Add review</h4>
     {{ form_start(review_form, {
-        'action': path('book_show', { 'id': book.id }), 
+        'action': path('book_show', {'id': book.id}), 
         'method': 'POST'
         }) 
     }}
@@ -35,13 +31,10 @@
     {{ form_widget(review_form) }}
         <input type="submit" value="Add review" class="btn btn-default btn-xs"> 
     {{ form_end(review_form) }}
-
 {% else %}
     <p>Please, log in to rate and add reviews.</p>
 {% endif %}    
-
 <hr>
-
 {% if app.session.flashBag.has('success') %}
     <div class="alert alert-success">
         {% for msg in app.session.flashBag.get('success') %}
@@ -49,30 +42,23 @@
         {% endfor %}
     </div>
 {% endif %}
-
 {{ form_start(read_form) }}
     <input type="submit" value="Mark as Read" class="btn btn-default btn-xs">
 {{ form_end(read_form) }}
-
 {{ form_start(favourite_form) }}
     <input type="submit" value="Add to favourites" class="btn btn-default btn-xs">
 {{ form_end(favourite_form) }}
-
 {{ form_start(wanted_form) }}
     <input type="submit" value="Add to wanted" class="btn btn-default btn-xs">
 {{ form_end(wanted_form) }}
-
 {{ form_start(current_form) }}
     <input type="submit" value="Add to current" class="btn btn-default btn-xs">
 {{ form_end(current_form) }}           
-
 <hr>
 <h4>About {{ book.author.name }}</h4>
-
 {% if vich_uploader_asset(book.author, 'image') is not null %}
     <img src="{{ vich_uploader_asset(book.author, 'image')|imagine_filter('s_thumb') }}" alt="{{ book.author.name }}" class="img-thumbnail pull-left" />
 {% endif %}
-
 <p>{{ book.author.description }}</p>            
 <hr>            
 <h4>On Shelves</h4>

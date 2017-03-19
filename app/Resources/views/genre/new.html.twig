@@ -1,14 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	
     <h1>Genre creation</h1>
-
     {{ form_start(form) }}
         {{ form_widget(form) }}
         <input type="submit" value="Create" class="btn btn-default" />
     {{ form_end(form) }}
-
     <a href="{{ path('genre_index') }}" class="btn btn-default">Back to the list</a>
-
 {% endblock %}

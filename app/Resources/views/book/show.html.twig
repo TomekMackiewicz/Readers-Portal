@@ -1,33 +1,25 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
     {{ include('book/includes/modal.html.twig') }}
-
     <div class="row">
         <div class="col-md-8">
-
             {% if vich_uploader_asset(book, 'coverImage') is not null %}
                 <img src="{{ vich_uploader_asset(book, 'coverImage')|imagine_filter('thumb') }}" alt="{{ book.title }}" class="img-thumbnail img-show pull-left" />
             {% else %}
                 <img src="http://placehold.it/220x313?text=No image" class="img-thumbnail img-show pull-left">
             {% endif %}
-
             <h3>{{ book.title }}</h3>
             <h4>by <a href="{{ path('author_show', { 'id': book.author.id }) }}">{{ book.author.name }}</a></h4>
             <select class="showRating">
-
                 {% for i in 1..10 %}
                     <option value="{{ i }}">{{ i }}</option>
                 {% endfor %} 
-
             </select>
-
             {% set sumratings = 0 %}
             {% for rating in book.ratings %}
                 {% set sumratings = sumratings + rating.rate %}
-            {% endfor %}
-            
+            {% endfor %}            
             {% if book.ratings|length > 0 %}
                 <span id="avgRate">{{ (sumratings / book.ratings|length)|round(2) }}</span>
                  ({{book.ratings|length}} ratings, {{ book.reviews|length }} reviews)
@@ -37,58 +29,42 @@
             {% else %}
                 <span id="avgRate">0</span> ratings, 0 reviews.               
             {% endif %}
-
             <hr> 
             <p>{{ book.description }}</p>
             <hr>
-
             {% if book.publishDate %}
                 <small>Published: {{ book.publishDate|date('Y') }}</small>
                 <br>
             {% endif %}
-
             <small>Added: {{ book.addDate|date('Y-m-d') }}</small>
             <br>
-
             {% if book.translator %}
                 <small>Translator: {{ book.translator.name }}</small>
                 <br>
-            {% endif %}    
-            
+            {% endif %}             
             {% if book.publisher %}
                 <small>Publisher: {{ book.publisher.name }}</small>
                 <br>
-            {% endif %}
-            
+            {% endif %}     
             <small>ISBN: {{ book.isbn }}</small><br>
             <small>Genre(s):
-
                 {% for genre in book.genres %}
                     {{genre.name}}
                 {% endfor %}
-
             </small><br>
             <small>Tag(s):
-
                 {% if book.getTags() %}
                     {% for tag in book.getTags %}
                         {{ tag.name }}
                     {% endfor %}
                 {% endif %}
-
             </small>
             <hr>
             <div class="clearfix"></div>
-
             {{ include('book/includes/reviews.html.twig') }}
-
         </div>
-       
         <div class="col-md-4">
-
-            {{ include('book/includes/sidebar.html.twig') }}
-         
+            {{ include('book/includes/sidebar.html.twig') }}  
         </div>
     </div>        
-
 {% endblock %}

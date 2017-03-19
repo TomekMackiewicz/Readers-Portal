@@ -1,5 +1,4 @@
 {% for book in books %}
-
     <div class="item">
         <br>
         <div class="pull-left">
@@ -14,14 +13,11 @@
         <h3><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.title }}</a></h3>
         <h4>by <a href="{{ path('author_show', { 'id': book.authorId }) }}">{{ book.authorName }}</a></h4>
         <select class="showRating">
-
             {% for i in 1..10 %}
                 <option value="{{ i }}">{{ i }}</option>
-            {% endfor %}
-            
+            {% endfor %}       
         </select>
         <span>{{ book.avgRating|round(2) }}</span>
          ({{ book.ratingsCount }} votes, {{ book.reviewsCount }} reviews)
     </div>
-
 {% endfor %}
