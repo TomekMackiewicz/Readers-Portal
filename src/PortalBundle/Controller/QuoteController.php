@@ -5,12 +5,13 @@ namespace PortalBundle\Controller;
 use PortalBundle\Entity\Quote;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Quote controller.
  *
- * @Route("quote")
+ * @Route("quotes")
  */
 class QuoteController extends Controller
 {
@@ -40,13 +41,17 @@ class QuoteController extends Controller
     public function newAction(Request $request)
     {
         $quote = new Quote();
+        $reader = $this->getUser();
         $form = $this->createForm('PortalBundle\Form\QuoteType', $quote);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $quote->setReader($reader);
+            $reader->setQuote($quote);
             $em = $this->getDoctrine()->getManager();
             $em->persist($quote);
-            $em->flush($quote);
+            $em->persist($reader);
+            $em->flush();
 
             return $this->redirectToRoute('quote_show', array('id' => $quote->getId()));
         }

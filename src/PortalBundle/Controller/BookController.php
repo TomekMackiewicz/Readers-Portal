@@ -140,14 +140,14 @@ class BookController extends BaseController
         $reviewForm = $this->createForm('PortalBundle\Form\ReviewType')->handleRequest($request);
         $ratingForm = $this->createForm('PortalBundle\Form\RatingType')->handleRequest($request);
 
-        $checkReadersUniqueRating = $this->getRepo('PortalBundle:Rating')
-            ->checkReadersUniqueRating($this->getUser()->getId(), $book->getId());
-
-        $checkReadersUniqueReview = $this->getRepo('PortalBundle:Review')
-            ->checkReadersUniqueReview($this->getUser()->getId(), $book->getId());
-
-        $this->setReview($request, $reviewForm, $checkReadersUniqueReview, $checkReadersUniqueRating, $book);
-        $this->setRating($request, $ratingForm, $checkReadersUniqueRating, $book);
+        if($this->getUser()) {
+            $checkReadersUniqueRating = $this->getRepo('PortalBundle:Rating')
+                ->checkReadersUniqueRating($this->getUser()->getId(), $book->getId());
+            $checkReadersUniqueReview = $this->getRepo('PortalBundle:Review')
+                ->checkReadersUniqueReview($this->getUser()->getId(), $book->getId());
+            $this->setReview($request, $reviewForm, $checkReadersUniqueReview, $checkReadersUniqueRating, $book);
+            $this->setRating($request, $ratingForm, $checkReadersUniqueRating, $book);
+        }
         
         $this->get('mk.tag_manager')->findTagRelation($book);
         

@@ -19,7 +19,11 @@ class QuoteType extends AbstractType
             ->add('author', EntityType::class, array(
                 'class' => 'PortalBundle:Author',
                 'choice_label' => 'name'
-            ));
+            ))
+            ->add('book', EntityType::class, array(
+                'class' => 'PortalBundle:Book',
+                'choice_label' => 'title'
+            ));            
     }
     
     /**

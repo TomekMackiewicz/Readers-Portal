@@ -99,6 +99,11 @@ class Reader extends BaseUser
     private $ratings;
 
     /**
+    * @ORM\OneToMany(targetEntity="Quote", mappedBy="reader")
+    */
+    private $quotes;
+
+    /**
      * @ORM\OneToMany(targetEntity="FavouriteBook", mappedBy="reader", cascade={"persist"})
      */
     private $favouriteBooks;
@@ -119,6 +124,7 @@ class Reader extends BaseUser
         $this->authors = new ArrayCollection();
         $this->reviews = new ArrayCollection();
         $this->ratings = new ArrayCollection();
+        $this->quotes = new ArrayCollection();
         $this->favouriteBooks = new ArrayCollection();
         $this->wantedBooks = new ArrayCollection();
         $this->currentBooks = new ArrayCollection();
@@ -466,6 +472,39 @@ class Reader extends BaseUser
     public function getCurrentBooks()
     {
         return $this->currentBooks;
+    }
+
+    /**
+     * Add quotes
+     *
+     * @param \PortalBundle\Entity\Quote $quotes
+     * @return Reader
+     */
+    public function addQuote(\PortalBundle\Entity\Quote $quotes)
+    {
+        $this->quotes[] = $quotes;
+
+        return $this;
+    }
+
+    /**
+     * Remove quotes
+     *
+     * @param \PortalBundle\Entity\Quote $quotes
+     */
+    public function removeQuote(\PortalBundle\Entity\Quote $quotes)
+    {
+        $this->quotes->removeElement($quotes);
+    }
+
+    /**
+     * Get quotes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getQuotes()
+    {
+        return $this->quotes;
     }
 
 }

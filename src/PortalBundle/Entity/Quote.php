@@ -35,10 +35,22 @@ class Quote
     // -----------------------------------------
 
     /**
+    * @ORM\ManyToOne(targetEntity="Reader", inversedBy="quotes")
+    * @ORM\JoinColumn(name="readerId", referencedColumnName="id", onDelete="CASCADE")   
+    */
+    private $reader;
+
+    /**
     * @ORM\ManyToOne(targetEntity="Author", inversedBy="quotes")
     * @ORM\JoinColumn(name="authorId", referencedColumnName="id", onDelete="CASCADE")   
     */
     private $author;
+
+    /**
+    * @ORM\ManyToOne(targetEntity="Book", inversedBy="quotes")
+    * @ORM\JoinColumn(name="bookId", referencedColumnName="id", onDelete="CASCADE")   
+    */
+    private $book;
 
     // -----------------------------------------
     //
@@ -80,6 +92,29 @@ class Quote
     }
 
     /**
+     * Set reader
+     *
+     * @param \PortalBundle\Entity\Reader $reader
+     * @return Quote
+     */
+    public function setReader(\PortalBundle\Entity\Reader $reader = null)
+    {
+        $this->reader = $reader;
+
+        return $this;
+    }
+
+    /**
+     * Get reader
+     *
+     * @return \PortalBundle\Entity\Reader 
+     */
+    public function getReader()
+    {
+        return $this->reader;
+    }
+
+    /**
      * Set author
      *
      * @param \PortalBundle\Entity\Author $author
@@ -101,4 +136,28 @@ class Quote
     {
         return $this->author;
     }
+
+    /**
+     * Set book
+     *
+     * @param \PortalBundle\Entity\Book $book
+     * @return Quote
+     */
+    public function setBook(\PortalBundle\Entity\Book $book = null)
+    {
+        $this->book = $book;
+
+        return $this;
+    }
+
+    /**
+     * Get book
+     *
+     * @return \PortalBundle\Entity\Book 
+     */
+    public function getBook()
+    {
+        return $this->book;
+    }
+
 }

@@ -149,6 +149,11 @@ class Book implements Taggable
     private $ratings;
 
     /**
+    * @ORM\OneToMany(targetEntity="Quote", mappedBy="book")
+    */
+    private $quotes;
+
+    /**
      * @ORM\OneToMany(targetEntity="FavouriteBook", mappedBy="book", cascade={"remove"})
      */
     private $favouriteBooks;
@@ -175,6 +180,7 @@ class Book implements Taggable
         $this->reviews = new ArrayCollection();
         $this->ratings = new ArrayCollection();
         $this->genres = new ArrayCollection();
+        $this->quotes = new ArrayCollection();
         $this->favouriteBooks = new ArrayCollection();
         $this->wantedBooks = new ArrayCollection();
         $this->currentBooks = new ArrayCollection();
@@ -663,6 +669,39 @@ class Book implements Taggable
     public function getGenres()
     {
         return $this->genres;
+    }
+
+    /**
+     * Add quotes
+     *
+     * @param \PortalBundle\Entity\Quote $quotes
+     * @return Book
+     */
+    public function addQuote(\PortalBundle\Entity\Quote $quotes)
+    {
+        $this->quotes[] = $quotes;
+
+        return $this;
+    }
+
+    /**
+     * Remove quotes
+     *
+     * @param \PortalBundle\Entity\Quote $quotes
+     */
+    public function removeQuote(\PortalBundle\Entity\Quote $quotes)
+    {
+        $this->quotes->removeElement($quotes);
+    }
+
+    /**
+     * Get quotes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getQuotes()
+    {
+        return $this->quotes;
     }
 
 }
